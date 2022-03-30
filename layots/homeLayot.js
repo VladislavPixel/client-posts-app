@@ -1,6 +1,8 @@
 import React from "react"
-import WrapperContent from "../components/HOC/wrapperContent"
+import PropTypes from "prop-types"
 import Header from "../components/common/header"
+import WrapperContent from "../components/HOC/wrapperContent"
+import Footer from "../components/common/footer"
 
 const HomeLayot = ({ children }) => {
 	return (
@@ -9,9 +11,16 @@ const HomeLayot = ({ children }) => {
 			<WrapperContent>
 				{children}
 			</WrapperContent>
-			{/* Footer */}
+			<Footer />
 		</React.Fragment>
 	)
+}
+
+HomeLayot.propTypes = {
+	children: PropTypes.oneOfType([
+		PropTypes.arrayOf(PropTypes.node),
+		PropTypes.node
+	])
 }
 
 export default HomeLayot

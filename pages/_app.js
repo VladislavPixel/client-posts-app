@@ -1,3 +1,5 @@
+import "../styles/style.scss"
+
 const MyApp = ({ Component, pageProps }) => {
 	return (
 		<div className="wrapper">
