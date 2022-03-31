@@ -11,6 +11,10 @@
 }
 
 .not-found-block{
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	&__container{
 		padding: 20px;
 		display: flex;

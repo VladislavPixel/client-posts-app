@@ -1,0 +1,12 @@
+.authorization-block{
+	&__title{
+		margin-top: 40px;
+		text-align: center;
+	}
+	&__icon-btn{
+		width: 15px;
+		height: 15px;
+		transform: rotate(180deg);
+		margin-right: 5px;
+	}
+}
