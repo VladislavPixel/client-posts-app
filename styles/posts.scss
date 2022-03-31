@@ -11,7 +11,7 @@
 	}
 }
 
-.card-posts{
+.card-post{
 	border: 1px solid #E2E2E2;
 	border-radius: 20px;
 	&__wrap-img{
@@ -31,7 +31,7 @@
 	}
 }
 
-.posts-content-card{
+.post-content-card{
 	&__title{
 		transition: color 0.3s ease 0s;
 		font-weight: 700;
@@ -56,7 +56,7 @@
 	}
 }
 
-.card-controllers{
+.card-actions{
 	display: flex;
 	align-items: center;
 	&__comment-icon{
