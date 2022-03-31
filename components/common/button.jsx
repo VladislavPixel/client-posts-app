@@ -18,7 +18,7 @@ Button.propTypes = {
 	type: PropTypes.string.isRequired,
 	text: PropTypes.string.isRequired,
 	classesParent: PropTypes.string.isRequired,
-	onCallFun: PropTypes.func.isRequired,
+	onCallFun: PropTypes.func,
 	icon: PropTypes.oneOfType([
 		PropTypes.node,
 		PropTypes.bool
