@@ -5,22 +5,22 @@ import Header from "../components/common/header"
 import Footer from "../components/common/footer"
 
 const PostLayot = ({ children }) => {
-   return (
-      <React.Fragment>
-         <Header />
-         <WrapperContent>
-            {children}
-         </WrapperContent>
-         <Footer />
-      </React.Fragment>
-   )
+	return (
+		<React.Fragment>
+			<Header />
+			<WrapperContent>
+				{children}
+			</WrapperContent>
+			<Footer />
+		</React.Fragment>
+	)
 }
 
 PostLayot.propTypes = {
-   children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node
-   ]).isRequired
+	children: PropTypes.oneOfType([
+		PropTypes.arrayOf(PropTypes.node),
+		PropTypes.node
+	]).isRequired
 }
 
 export default PostLayot

@@ -73,4 +73,35 @@ const posts = [
 	}
 ]
 
+const comments = [
+	{
+		ID: "dfgdfgdfg999",
+		Username: "Славян",
+		Content: "Вот это мега крутой пост) Просто топ!",
+		UserId: "5556667770",
+		PostID: "32424"
+	},
+	{
+		ID: "dfgdfgdfgtryyut",
+		Username: "Виталик",
+		Content: "Вот это мега крутой пост) Просто топ!",
+		UserId: "5556667771",
+		PostID: "32424"
+	},
+	{
+		ID: "dfgdfgdfgсми",
+		Username: "Максим",
+		Content: "Вот это мега крутой пост) Просто топ!",
+		UserId: "5556667772",
+		PostID: "32424"
+	},{
+		ID: "dfgdfgdfgапрар",
+		Username: "Миша",
+		Content: "Вот это мега крутой пост) Просто топ!",
+		UserId: "5556667774",
+		PostID: "32424"
+	}
+]
+
+export { comments }
 export default posts

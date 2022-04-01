@@ -1,14 +1,13 @@
 import HomeLayot from "../layots/homeLayot"
-import PostCard from "../components/ui/postCard"
+import PropTypes from "prop-types"
+import PostsList from "../components/ui/postsList"
 
 const HomePage = ({ posts }) => {
 	return (
 		<HomeLayot>
 			<div className="container-content__block-posts posts-block">
 				<div className="posts-block__container _container">
-					<div className="posts-block__list">
-						{posts.map(post => <PostCard key={post.ID} {...post} />)}
-					</div>
+					<PostsList data={posts} />
 				</div>
 			</div>
 		</HomeLayot>
@@ -21,6 +20,10 @@ export async function getStaticProps() {
 	return {
 		props: { posts: jsonPosts },
 	}
+}
+
+HomePage.propTypes = {
+	posts: PropTypes.array.isRequired
 }
 
 export default HomePage

@@ -1,19 +1,19 @@
 .posts{
-   &__title{
-      margin-bottom: 15px;
-   }
-   &__search{
-      max-width: 400px;
-      margin-bottom: 20px;
-      @media(max-width: 430px) {
-         .search-block__wrap{
-            padding: 7px 16px ;
-         }
-      }
-   }
-   &__list{
-      display: flex;
-      flex-wrap: wrap;
-      margin: 0px -11px -40px -11px;
-   }
+	&__title{
+		margin-bottom: 15px;
+	}
+	&__search{
+		max-width: 400px;
+		margin-bottom: 20px;
+		@media(max-width: 430px) {
+				.search-block__wrap{
+					padding: 7px 16px ;
+				}
+		}
+	}
+	&__list{
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0px -11px -40px -11px;
+	}
 }

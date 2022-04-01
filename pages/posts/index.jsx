@@ -1,21 +1,20 @@
 import PostsLayot from "../../layots/postsLayot"
+import PropTypes from "prop-types"
 import Search from "../../components/common/search"
-import PostCard from "../../components/ui/postCard"
+import PostsList from "../../components/ui/postsList"
 
 const PostsPage = ({ posts }) => {
-   return (
-      <PostsLayot>
-         <div className="container-content__posts posts">
-            <div className="posts__container _container">
-               <h1 className="posts__title title">Посты</h1>
-               <Search classesParent="posts" />
-               <div className="posts__list">
-                  {posts.map(post => <PostCard key={post.ID} {...post} />)}
-               </div>
-            </div>
-         </div>
-      </PostsLayot>
-   )
+	return (
+		<PostsLayot>
+			<div className="container-content__posts posts">
+				<div className="posts__container _container">
+					<h1 className="posts__title title">Посты</h1>
+					<Search classesParent="posts" />
+					<PostsList data={posts} />
+				</div>
+			</div>
+		</PostsLayot>
+	)
 }
 
 export async function getStaticProps() {
@@ -24,6 +23,10 @@ export async function getStaticProps() {
 	return {
 		props: { posts: jsonPosts },
 	}
+}
+
+PostsPage.propTypes = {
+	posts: PropTypes.array.isRequired
 }
 
 export default PostsPage
