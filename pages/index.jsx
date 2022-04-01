@@ -16,7 +16,7 @@ const HomePage = ({ posts }) => {
 }
 
 export async function getStaticProps() {
-	const responcePosts = await fetch(process.env.API_URL)
+	const responcePosts = await fetch(process.env.API_URL + "posts")
 	const jsonPosts = await responcePosts.json()
 	return {
 		props: { posts: jsonPosts },

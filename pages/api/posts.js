@@ -1,9 +1,9 @@
 import posts from "../../fakeDb/db"
 
-const echoPosts = (req, res) => {
+const Posts = (req, res) => {
 	res.statusCode = 200
 	res.setHeader("Content-type", "application/json")
-	if (req.url === "/api/echo") {
+	if (req.url === "/api/posts") {
 		setTimeout(() => {
 			res.status(200).send(posts)
 		}, 1000)
@@ -12,4 +12,4 @@ const echoPosts = (req, res) => {
 	res.status(200).send([])
 }
 
-export default echoPosts
+export default Posts

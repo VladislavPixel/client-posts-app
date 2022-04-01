@@ -6,7 +6,7 @@ const NotFoundPage = () => {
 	return (
 		<div className="not-found-block">
 			<div className="not-found-block__container">
-				<img className="not-found-block__icon" src="./icons/notFound.svg" alt="Иконка ошибки 404-страница не была найдена" />
+				<img className="not-found-block__icon" src="/icons/notFound.svg" alt="Иконка ошибки 404-страница не была найдена" />
 				<h1 className="not-found-block__title">Страница не была найдена: <span>Ошибка 404</span></h1>
 				<p className="not-found-block__sub-title">Попробуйте вбить другой адрес в адресной строке или нажмите кнопку, чтобы вернуться на главную сайта.</p>
 				<Button onCallFun={handlerBackBtn} type="button" text="На главную" classesParent="not-found-block" />

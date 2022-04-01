@@ -10,7 +10,7 @@ const AuthorizationPage = () => {
 		Password: ""
 	})
 	const handlerBackBtn = () => Router.push("/")
-	const icon = <img className="authorization-block__icon-btn" src="./icons/arrowDouble.svg" alt="Иконка двойной трелки" />
+	const icon = <img className="authorization-block__icon-btn" src="/icons/arrowDouble.svg" alt="Иконка двойной трелки" />
 	const handlerSubmitForm = (data) => {
 		console.log(data, "Пошла отправка данных")
 	}

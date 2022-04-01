@@ -31,6 +31,9 @@ $fontFamily: "Manrope", sans-serif;
 .content-container{
 	flex: 1 1 auto;
 	margin: 46px 0px;
+	@media(max-width: 360px) {
+		margin: 25px 0px 26px 0px;
+	}
 }
 
 .title{
@@ -85,3 +88,6 @@ $fontFamily: "Manrope", sans-serif;
 @import "posts";
 @import "form";
 @import "authorization";
+@import "postsPage";
+@import "postPage";
+@import "smallMessage";

@@ -16,7 +16,7 @@ const Header = ({ isSearch, isAuthBtn }) => {
 					<div className="header__column header__column_second">
 						{isSearch && <Search classesParent="header" />}
 						<div className="header__posts-link link-posts">
-							<img className="link-posts__icon" src="./icons/postsIcon.svg" alt="Иконка постов" />
+							<img className="link-posts__icon" src="/icons/postsIcon.svg" alt="Иконка постов" />
 							<Link href="/posts"><a className="link-posts__ref">Посты</a></Link>
 						</div>
 					</div>
