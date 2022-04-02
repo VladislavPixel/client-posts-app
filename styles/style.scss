@@ -31,8 +31,13 @@ $fontFamily: "Manrope", sans-serif;
 .content-container{
 	flex: 1 1 auto;
 	margin: 46px 0px;
-	@media(max-width: 360px) {
+	@media(max-width: 400px) {
 		margin: 25px 0px 26px 0px;
+	}
+	&__post{
+		@media(max-width: 400px) {
+			margin-top: -15px;
+		}
 	}
 }
 
@@ -91,3 +96,4 @@ $fontFamily: "Manrope", sans-serif;
 @import "postsPage";
 @import "postPage";
 @import "smallMessage";
+@import "pagination";

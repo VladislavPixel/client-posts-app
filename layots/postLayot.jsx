@@ -7,7 +7,7 @@ import Footer from "../components/common/footer"
 const PostLayot = ({ children }) => {
 	return (
 		<React.Fragment>
-			<Header />
+			<Header isPostLayot={true} />
 			<WrapperContent>
 				{children}
 			</WrapperContent>

@@ -3,6 +3,10 @@
 		position: relative;
 		padding: 0px 0px 29% 0px;
 		margin-bottom: 25px;
+		@media(max-width: 400px) {
+			padding: 0px 0px 75% 0px;
+			margin: 0px -10px 15px -10px;
+		}
 	}
 	&__img{
 		position: absolute;
@@ -18,18 +22,65 @@
 		align-items: center;
 	}
 }
+.head-block-post{
+	display: none;
+	@media(max-width: 400px) {
+		display: block;
+		margin-bottom: 5px;
+		&__btn-head{
+			font-weight: 600;
+			font-size: 18px;
+			line-height: 24px;
+			letter-spacing: 0.5px;
+			color: #FF008A;
+			position: relative;
+			padding-left: 30px;
+			&:after,&:before{
+				content: "";
+				position: absolute;
+				left: 0;
+				width: 15px;
+				height: 2px;
+				background: #FF008A;
+			}
+			&:after{
+				top: 32%;
+				transform: rotate(-35deg);
+			}
+			&:before{
+				bottom: 20%;
+				transform: rotate(35deg);
+			}
+		}
+		&__header{
+			text-align: center;
+			font-weight: 600;
+			font-size: 18px;
+			line-height: 24px;
+			color: black;
+			margin-top: -22px;
+		}
+	}
+}
 
 .post-content{
 	&__title{
 		padding-bottom: 30px;
 		border-bottom: 1px solid #D1D1D6;
 		margin-bottom: 30px;
+		@media(max-width: 400px) {
+			margin-bottom: 16px;
+			padding-bottom: 16px;
+		}
 	}
 	&__text{
 		font-size: 18px;
 		line-height: 30px;
 		color: rgba(60, 60, 67, 0.6);
 		margin-bottom: 30px;
+		@media(max-width: 400px) {
+			margin-bottom: 16px;
+		}
 	}
 	&__icon-btn{
 		margin-right: 15px;
@@ -51,11 +102,15 @@
 		}
 	}
 	&__area-wrap{
-		padding: 20px 95px 40px 20px;
+		padding: 20px 30px 40px 20px;
 		border: 1px solid #D1D1D6;
 		border-radius: 8px;
 		overflow: hidden;
 		margin-bottom: 30px;
+		@media(max-width: 400px) {
+			padding: 10px;
+			margin-bottom: 15px;
+		}
 	}
 	&__area{
 		width: 100%;
@@ -75,6 +130,9 @@
 		letter-spacing: -0.02em;
 		color: black;
 		margin-bottom: 30px;
+		@media(max-width: 400px) {
+			margin-bottom: 16px;
+		}
 	}
 	&__message-small{
 		.small-message__title{
@@ -95,6 +153,9 @@
 	display: flex;
 	padding: 8px 16px 28px 16px;
 	margin-bottom: 20px;
+	@media(max-width: 400px) {
+		padding: 0;
+	}
 	&:last-child{
 		margin-bottom: 0;
 	}

@@ -1,20 +1,31 @@
 import PostLayot from "../../layots/postLayot"
 import SmallMessage from "../../components/common/smallMessage"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import Button from "../../components/common/button"
 import PostTextAreaBlock from "../../components/ui/postTextAreaBlock"
 import PropTypes from "prop-types"
-import CommentsList from "../../components/ui/commentsList"
+import CommentsBlock from "../../components/ui/commentsBlock"
+import Router from "next/router"
 
 const PostPage = ({ post, comments }) => {
+	const refBlockPost = useRef(null)
+	const [isBigImg, setBigImg] = useState(true)
 	const [isEdit, setEdit] = useState(false)
 	const handlerModeEdit = () => setEdit(prevState => !prevState)
+	const correctPathImg = (isBigImg ? "/images/postImg.png" : "/images/postImgSmall.png")
+	useEffect(() => {
+		if (refBlockPost.current.offsetWidth <= 400) setBigImg(false)
+	}, [])
 	return (
 		<PostLayot>
-			<div className="container-content__post block-post">
+			<div ref={refBlockPost} className="content-container__post block-post">
 				<div className="block-post__container _container">
+					<div className="block-post__head head-block-post">
+						<button className="head-block-post__btn-head" type="button" onClick={() => Router.push("/")}>Назад</button>
+						<h1 className="head-block-post__header">Пост</h1>
+					</div>
 					<div className="block-post__image-wrap">
-						<img className="block-post__img" src="/images/postImg.png" alt="Изображение на странице поста: человек читает книгу под деревом" />
+						<img className="block-post__img" src={correctPathImg} alt="Изображение на странице поста: человек читает книгу под деревом" />
 					</div>
 					{!post.ID ?
 						<SmallMessage classesParent="block-post" altIcon="Иконка плачащего смайлика" iconPath="/icons/sadSmile.svg" title="Такого поста не существует" offer="Перейдите на главную сайта и выберете доступные посты или исправьте путь в адресной строке" /> :
@@ -36,10 +47,7 @@ const PostPage = ({ post, comments }) => {
 									Редактировать текст
 								</button>
 							}
-							<div className="post-content__comments block-comments">
-								<h3 className="block-comments__title">Комментарии</h3>
-								<CommentsList data={comments} />
-							</div>
+							<CommentsBlock data={comments} classesParent="post-content" />
 						</div>
 					}
 				</div>

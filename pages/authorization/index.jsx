@@ -24,7 +24,7 @@ const AuthorizationPage = () => {
 	}
 	return (
 		<AuthorizationLayot>
-			<div className="container-content__block-authorization authorization-block">
+			<div className="content-container__block-authorization authorization-block">
 				<div className="authorization-block__container _container">
 					<Button type="button" text="Назад" classesParent="authorization-block" onCallFun={handlerBackBtn} icon={icon} isIcon={true} />
 					<h1 className="authorization-block__title title">Страница Авторизации</h1>
