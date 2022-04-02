@@ -5,10 +5,8 @@ const CurrentPost = (req, res) => {
 	res.setHeader("Content-type", "application/json")
 	const post = posts.find(postEl => postEl.ID === id)
 	if (post) {
-		setTimeout(() => {
 		res.status(200).send(post)
-	}, 1000)
-	return
+		return
 	}
 	res.status(200).send({})
 }

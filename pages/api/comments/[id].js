@@ -7,9 +7,7 @@ const Comments = (req, res) => {
 	for (const comment of comments) {
 		if (id === comment.PostID) commentsForPost.push(comment)
 	}
-	setTimeout(() => {
-		res.status(200).send(commentsForPost)
-	}, 1000)
+	res.status(200).send(commentsForPost)
 }
 
 export default Comments

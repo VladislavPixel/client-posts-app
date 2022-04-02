@@ -1,11 +1,14 @@
 import { useState } from "react"
 import HomeLayot from "../layots/homeLayot"
-import PropTypes from "prop-types"
 import PostsList from "../components/ui/postsList"
 import getNewArrayPagins from "../utils/pagination"
 import Pagination from "../components/ui/pagination"
+import { fetchAllPostsData, getDataPosts } from "../store/posts"
+import { useSelector } from "react-redux"
+import { wrapper } from "../store/createStore"
 
-const HomePage = ({ posts }) => {
+const HomePage = () => {
+	const posts = useSelector(getDataPosts())
 	const [currentPagin, setCurrentPagin] = useState(1) // State Pagin
 	const MAX_POSTS_ON_PAGE = 9
 	const handlerUpdatePagin = (id) => setCurrentPagin(id)
@@ -16,7 +19,6 @@ const HomePage = ({ posts }) => {
 		posts
 	) // PAGINATIONS
 	const handlerArrowPagins = (typeMethod) => {
-		console.log(typeMethod)
 		if (typeMethod === "decrement") {
 			setCurrentPagin((prevState) => {
 				return prevState - 1
@@ -50,16 +52,13 @@ const HomePage = ({ posts }) => {
 	)
 }
 
-export async function getStaticProps() {
-	const responcePosts = await fetch(process.env.API_URL + "posts")
-	const jsonPosts = await responcePosts.json()
-	return {
-		props: { posts: jsonPosts },
+export const getStaticProps = wrapper.getStaticProps(store => 
+	async (context) => {
+		await store.dispatch(fetchAllPostsData())
+		return {
+			props: {},
+		}
 	}
-}
-
-HomePage.propTypes = {
-	posts: PropTypes.array.isRequired
-}
+)
 
 export default HomePage

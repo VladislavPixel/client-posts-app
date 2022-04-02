@@ -1,11 +1,14 @@
 import PostsLayot from "../../layots/postsLayot"
-import PropTypes from "prop-types"
 import Search from "../../components/common/search"
 import PostsList from "../../components/ui/postsList"
 import Button from "../../components/common/button"
 import { useState } from "react"
+import { wrapper } from "../../store/createStore"
+import { useSelector } from "react-redux"
+import { fetchAllPostsData, getDataPosts } from "../../store/posts"
 
-const PostsPage = ({ posts }) => {
+const PostsPage = () => {
+	const posts = useSelector(getDataPosts())
 	const MAX_POSTS = 9
 	const getCorrectData = (array) => {
 		let dataFilter
@@ -43,16 +46,13 @@ const PostsPage = ({ posts }) => {
 	)
 }
 
-export async function getStaticProps() {
-	const responcePosts = await fetch(process.env.API_URL + "posts")
-	const jsonPosts = await responcePosts.json()
-	return {
-		props: { posts: jsonPosts },
+export const getStaticProps = wrapper.getStaticProps(store => 
+	async (context) => {
+		await store.dispatch(fetchAllPostsData())
+		return {
+			props: {},
+		}
 	}
-}
-
-PostsPage.propTypes = {
-	posts: PropTypes.array.isRequired
-}
+)
 
 export default PostsPage
