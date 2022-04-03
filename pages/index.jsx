@@ -3,21 +3,29 @@ import HomeLayot from "../layots/homeLayot"
 import PostsList from "../components/ui/postsList"
 import getNewArrayPagins from "../utils/pagination"
 import Pagination from "../components/ui/pagination"
-import { fetchAllPostsData, getDataPosts } from "../store/posts"
-import { useSelector } from "react-redux"
+import {
+	fetchAllPostsData,
+	getDataPosts,
+	setAllPostsLength,
+	getLengthPostsValue
+} from "../store/posts"
+import { getSearchValuePosts } from "../store/searchPosts"
+import { useDispatch, useSelector } from "react-redux"
 import { wrapper } from "../store/createStore"
 
 const HomePage = () => {
-	const posts = useSelector(getDataPosts())
 	const [currentPagin, setCurrentPagin] = useState(1) // State Pagin
-	const MAX_POSTS_ON_PAGE = 9
+	const posts = useSelector(getDataPosts(currentPagin))
+	const lengthPostsAll = useSelector(getLengthPostsValue())
+	const valueSearchPosts = useSelector(getSearchValuePosts())
+	const MAX_POSTS_ON_PAGE = 10
 	const handlerUpdatePagin = (id) => setCurrentPagin(id)
-	const lengthPosts = posts.length
-	const newArrayPosts = getNewArrayPagins(
-		MAX_POSTS_ON_PAGE,
-		currentPagin,
-		posts
-	) // PAGINATIONS
+	const lengthPosts = lengthPostsAll
+	// const newArrayPosts = getNewArrayPagins(
+	// 	MAX_POSTS_ON_PAGE,
+	// 	currentPagin,
+	// 	posts
+	// ) // PAGINATIONS
 	const handlerArrowPagins = (typeMethod) => {
 		if (typeMethod === "decrement") {
 			setCurrentPagin((prevState) => {
@@ -34,7 +42,7 @@ const HomePage = () => {
 		<HomeLayot>
 			<div className="content-container__block-posts posts-block">
 				<div className="posts-block__container _container">
-					<PostsList data={newArrayPosts} />
+					<PostsList data={posts} />
 					{
 						lengthPosts > 0 &&
 						<Pagination 
@@ -54,7 +62,8 @@ const HomePage = () => {
 
 export const getStaticProps = wrapper.getStaticProps(store => 
 	async (context) => {
-		await store.dispatch(fetchAllPostsData())
+		await store.dispatch(fetchAllPostsData(1))
+		await store.dispatch(setAllPostsLength())
 		return {
 			props: {},
 		}

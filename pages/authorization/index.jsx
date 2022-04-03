@@ -6,8 +6,8 @@ import FormComponent, { TextField } from "../../components/common/form"
 
 const AuthorizationPage = () => {
 	const [dataAuth] = useState({
-		UserName: "",
-		Password: ""
+		username: "",
+		password: ""
 	})
 	const handlerBackBtn = () => Router.push("/")
 	const icon = <img className="authorization-block__icon-btn" src="/icons/arrowDouble.svg" alt="Иконка двойной трелки" />

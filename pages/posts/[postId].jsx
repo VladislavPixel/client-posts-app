@@ -6,6 +6,7 @@ import PostTextAreaBlock from "../../components/ui/postTextAreaBlock"
 import PropTypes from "prop-types"
 import CommentsBlock from "../../components/ui/commentsBlock"
 import Router from "next/router"
+import { wrapper } from "../../store/createStore"
 
 const PostPage = ({ post, comments }) => {
 	const refBlockPost = useRef(null)
@@ -27,7 +28,7 @@ const PostPage = ({ post, comments }) => {
 					<div className="block-post__image-wrap">
 						<img className="block-post__img" src={correctPathImg} alt="Изображение на странице поста: человек читает книгу под деревом" />
 					</div>
-					{!post.ID ?
+					{!post.id ?
 						<SmallMessage classesParent="block-post" altIcon="Иконка плачащего смайлика" iconPath="/icons/sadSmile.svg" title="Такого поста не существует" offer="Перейдите на главную сайта и выберете доступные посты или исправьте путь в адресной строке" /> :
 						<div className="block-post__content-post post-content">
 							<h2 className="post-content__title title">{post.Title}</h2>
@@ -56,16 +57,15 @@ const PostPage = ({ post, comments }) => {
 	)
 }
 
-export async function getServerSideProps({ params }) {
-	const { postId } = params
-	const responcePost = await fetch(process.env.API_URL + "posts/" + postId)
-	const jsonPost = await responcePost.json()
-	const responceComments = await fetch(process.env.API_URL + "comments/" + postId)
-	const jsonComments = await responceComments.json()
-	return {
-		props: { post: jsonPost, comments: jsonComments},
+export const getInitialProps = wrapper.getInitialProps(store => 
+	async (context) => {
+		console.log(store.getState().posts.data)
+		console.log(context.params.postId, "ЭТО КОНТЕКСТ")
+		return {
+			props: {post: {}}
+		}
 	}
-}
+)
 
 PostPage.propTypes = {
 	post: PropTypes.object.isRequired,

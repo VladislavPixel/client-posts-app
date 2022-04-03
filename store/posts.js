@@ -1,11 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, createAction } from "@reduxjs/toolkit"
 import { HYDRATE } from "next-redux-wrapper"
 import postsService from "../services/posts.service"
 
 const initialState = {
-	entities: [],
+	data: {},
 	isLoading: true,
-	error: null
+	error: null,
+	lengthPosts: null
 }
 
 const postsSlice = createSlice({
@@ -17,36 +18,62 @@ const postsSlice = createSlice({
 			state.isLoading = true
 		},
 		postsReceived(state, action) {
-			state.entities = action.payload
-			state.isLoading = false
+			const idPage = action.payload.idPage
+			if (!(idPage in state.data)) {
+				state.data[idPage] = action.payload.entities
+				state.isLoading = false
+			}
 		},
 		postsRequestField(state, action) {
 			state.error = action.payload
 			state.isLoading = false
+		},
+		postsLengthValueReceived(state, action) {
+			state.lengthPosts = action.payload
 		}
 	},
 	extraReducers: {
 		[HYDRATE]: (state, action) => {
-			console.log("HYDRATE ПРОЙДЕН")
-			state = action.payload.posts
+			console.log("HYDRATE ПРОЙДЕН!")
+			if (state.isLoading) {
+				state = action.payload.posts
+				return state
+			}
 			return state
 		}
 	}
 })
 
 const { actions, reducer: postsReducer } = postsSlice
-const { postsRequested, postsReceived, postsRequestField } = actions
+const { postsRequested, postsReceived, postsRequestField, postsLengthValueReceived } = actions
+
+// Additional actions
+const setPostsLengthRequested = createAction("posts/setPostsLengthRequested")
+const setPostsLengthRequestField = createAction("posts/setPostsLengthRequestField")
 
 // Actions
-export function fetchAllPostsData() {
+export function fetchAllPostsData(id) {
 	return async (dispatch) => {
 		dispatch(postsRequested())
 		try {
-			const dataPosts = await postsService.allPosts()
-			dispatch(postsReceived(dataPosts))
+			const dataPosts = await postsService.getPostsByPage(id)
+			dispatch(postsReceived({entities: dataPosts, idPage: id}))
 		} catch (err) {
 			const { message } = err
 			dispatch(postsRequestField(message))
+		}
+	}
+}
+export function setAllPostsLength() {
+	return async (dispatch) => {
+		dispatch(setPostsLengthRequested())
+		try {
+			const data = await fetch("http://localhost:8081/posts")
+			const jsonData = await data.json()
+			dispatch(postsLengthValueReceived(jsonData))
+		} catch (err) {
+			const { message } = err
+			dispatch(setPostsLengthRequestField(message))
 		}
 	}
 }
@@ -57,9 +84,14 @@ export const getLoaderPosts = () => {
 		return state.posts.isLoading
 	}
 }
-export const getDataPosts = () => {
+export const getDataPosts = (currentPagin) => {
 	return (state) => {
-		return state.posts.entities
+		return state.posts.data[currentPagin]
+	}
+}
+export const getLengthPostsValue = () => {
+	return (state) => {
+		return state.posts.lengthPosts
 	}
 }
 

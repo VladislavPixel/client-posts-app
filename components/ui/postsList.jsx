@@ -7,7 +7,7 @@ const PostsList = ({ data }) => {
 		data.length === 0 ?
 			<SmallMessage classesParent="posts-block" iconPath="/icons/sadSmile.svg" title="В текущий момент на сайте нет постов" offer="Попробуйте зайти позже" altIcon="Иконка грустного смайлика" /> :
 			<div className="posts-block__list">
-				{data.map(post => <PostCard key={post.ID} {...post} />)}
+				{data.map((post, index) => <PostCard key={post.id + index} {...post} />)}
 			</div>
 	)
 }
