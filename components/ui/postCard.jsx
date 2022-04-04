@@ -1,7 +1,14 @@
 import PropTypes from "prop-types"
 import Link from "next/link"
+import { useDispatch } from "react-redux"
+import { setCurrentPost } from "../../store/postPage"
 
-const PostCard = ({ id, title, description, Count }) => {
+const PostCard = ({ dataPost }) => {
+	const { id, title, description, Count } = dataPost
+	const dispatch = useDispatch()
+	const handlerClick = () => {
+		dispatch(setCurrentPost(dataPost))
+	}
 	return (
 		<div className="posts-block__column">
 			<div className="posts-block__card card-post">
@@ -11,7 +18,7 @@ const PostCard = ({ id, title, description, Count }) => {
 					</Link>
 				</div>
 				<div className="card-post__content post-content-card">
-					<Link href={`/posts/[postId]`} as={`/posts/${id}`}>
+					<Link onClick={handlerClick} href={`/posts/${id}`}>
 						<a><h3 className="post-content-card__title">{title}</h3></a>
 					</Link>
 					<p className="post-content-card__text">{description}</p>
@@ -20,7 +27,7 @@ const PostCard = ({ id, title, description, Count }) => {
 							<a className="card-actions__link"><img alt="Иконка комментария" className="card-actions__comment-icon" src="/icons/comment.svg" /></a>
 						</Link>
 						<span className="card-actions__number-comments">{Count}</span>
-						<Link href={`/posts/[postId]`} as={`/posts/${id}`}>
+						<Link href={`/posts/[postId]`}>
 							<a className="card-actions__link"><img alt="Иконка карандаша" className="card-actions__pencil-icon" src="/icons/pencil.svg" /></a>
 						</Link>
 					</div>
@@ -31,10 +38,7 @@ const PostCard = ({ id, title, description, Count }) => {
 }
 
 PostCard.propTypes = {
-	title: PropTypes.string.isRequired,
-	description: PropTypes.string.isRequired,
-	Count: PropTypes.number.isRequired,
-	id: PropTypes.string.isRequired
+	dataPost: PropTypes.object.isRequired
 }
 
 export default PostCard

@@ -12,7 +12,7 @@ const postsService = {
 		return data
 	},
 	getAllLength: async () => {
-		const { data } = await httpService.get(POSTS_END_POINT)
+		const { data } = await httpService.get(POSTS_END_POINT + "length/")
 		return data
 	}
 }

@@ -8,7 +8,7 @@ import {
 	getDataPosts,
 	setAllPostsLength,
 	getLengthPostsValue
-} from "../store/posts"
+} from "../store/homePage"
 import { getSearchValuePosts } from "../store/searchPosts"
 import { useDispatch, useSelector } from "react-redux"
 import { wrapper } from "../store/createStore"
@@ -60,12 +60,12 @@ const HomePage = () => {
 	)
 }
 
-export const getStaticProps = wrapper.getStaticProps(store => 
+export const getServerSideProps = wrapper.getServerSideProps(store => 
 	async (context) => {
 		await store.dispatch(fetchAllPostsData(1))
 		await store.dispatch(setAllPostsLength())
 		return {
-			props: {},
+			props: { },
 		}
 	}
 )

@@ -3,30 +3,23 @@ import { HYDRATE } from "next-redux-wrapper"
 import postsService from "../services/posts.service"
 
 const initialState = {
-	data: {},
-	isLoading: true,
+	data: null,
 	error: null,
 	lengthPosts: null
 }
 
-const postsSlice = createSlice({
-	name: "posts",
+const homePageSlice = createSlice({
+	name: "homePage",
 	initialState,
 	reducers: {
 		postsRequested(state) {
 			state.error = null
-			state.isLoading = true
 		},
 		postsReceived(state, action) {
-			const idPage = action.payload.idPage
-			if (!(idPage in state.data)) {
-				state.data[idPage] = action.payload.entities
-				state.isLoading = false
-			}
+			state.data = action.payload
 		},
 		postsRequestField(state, action) {
 			state.error = action.payload
-			state.isLoading = false
 		},
 		postsLengthValueReceived(state, action) {
 			state.lengthPosts = action.payload
@@ -34,17 +27,13 @@ const postsSlice = createSlice({
 	},
 	extraReducers: {
 		[HYDRATE]: (state, action) => {
-			console.log("HYDRATE ПРОЙДЕН!")
-			if (state.isLoading) {
-				state = action.payload.posts
-				return state
-			}
+			state = action.payload.homePage
 			return state
 		}
 	}
 })
 
-const { actions, reducer: postsReducer } = postsSlice
+const { actions, reducer: homePageReducer } = homePageSlice
 const { postsRequested, postsReceived, postsRequestField, postsLengthValueReceived } = actions
 
 // Additional actions
@@ -57,7 +46,7 @@ export function fetchAllPostsData(id) {
 		dispatch(postsRequested())
 		try {
 			const dataPosts = await postsService.getPostsByPage(id)
-			dispatch(postsReceived({entities: dataPosts, idPage: id}))
+			dispatch(postsReceived(dataPosts))
 		} catch (err) {
 			const { message } = err
 			dispatch(postsRequestField(message))
@@ -68,9 +57,9 @@ export function setAllPostsLength() {
 	return async (dispatch) => {
 		dispatch(setPostsLengthRequested())
 		try {
-			const data = await fetch("http://localhost:8081/posts")
-			const jsonData = await data.json()
-			dispatch(postsLengthValueReceived(jsonData))
+			const responce = await fetch("http://localhost:8081/posts")
+			const jsonResponce = await responce.json()
+			dispatch(postsLengthValueReceived(jsonResponce))
 		} catch (err) {
 			const { message } = err
 			dispatch(setPostsLengthRequestField(message))
@@ -79,20 +68,15 @@ export function setAllPostsLength() {
 }
 
 // Selectors
-export const getLoaderPosts = () => {
+export const getDataPosts = () => {
 	return (state) => {
-		return state.posts.isLoading
-	}
-}
-export const getDataPosts = (currentPagin) => {
-	return (state) => {
-		return state.posts.data[currentPagin]
+		return state.homePage.data
 	}
 }
 export const getLengthPostsValue = () => {
 	return (state) => {
-		return state.posts.lengthPosts
+		return state.homePage.lengthPosts
 	}
 }
 
-export default postsReducer
+export default homePageReducer

@@ -7,16 +7,29 @@ import PropTypes from "prop-types"
 import CommentsBlock from "../../components/ui/commentsBlock"
 import Router from "next/router"
 import { wrapper } from "../../store/createStore"
+import { useSelector, useDispatch } from "react-redux"
+import { getIsLoadingPost, fetchCurrentPost, getDataPost } from "../../store/postPage"
 
-const PostPage = ({ post, comments }) => {
+const PostPage = ({ postId }) => {
+	// Логика установка изображения поста
 	const refBlockPost = useRef(null)
 	const [isBigImg, setBigImg] = useState(true)
+	const correctPathImg = (isBigImg ? "/images/postImg.png" : "/images/postImgSmall.png")
+	// Update mode = обновление post
 	const [isEdit, setEdit] = useState(false)
 	const handlerModeEdit = () => setEdit(prevState => !prevState)
-	const correctPathImg = (isBigImg ? "/images/postImg.png" : "/images/postImgSmall.png")
+	// Получени поста страницы
+	const isLoading = useSelector(getIsLoadingPost())
+	const dispatch = useDispatch()
+	const post = useSelector(getDataPost())
 	useEffect(() => {
-		if (refBlockPost.current.offsetWidth <= 400) setBigImg(false)
+		console.log("Пошел запрос на получение")
+		dispatch(fetchCurrentPost(postId))
 	}, [])
+	useEffect(() => {
+		//if (refBlockPost.current.offsetWidth <= 400) setBigImg(false)
+	}, [isLoading])
+	if (isLoading) return <div>Loading...</div>
 	return (
 		<PostLayot>
 			<div ref={refBlockPost} className="content-container__post block-post">
@@ -28,7 +41,7 @@ const PostPage = ({ post, comments }) => {
 					<div className="block-post__image-wrap">
 						<img className="block-post__img" src={correctPathImg} alt="Изображение на странице поста: человек читает книгу под деревом" />
 					</div>
-					{!post.id ?
+					{!post.ID ?
 						<SmallMessage classesParent="block-post" altIcon="Иконка плачащего смайлика" iconPath="/icons/sadSmile.svg" title="Такого поста не существует" offer="Перейдите на главную сайта и выберете доступные посты или исправьте путь в адресной строке" /> :
 						<div className="block-post__content-post post-content">
 							<h2 className="post-content__title title">{post.Title}</h2>
@@ -48,7 +61,7 @@ const PostPage = ({ post, comments }) => {
 									Редактировать текст
 								</button>
 							}
-							<CommentsBlock data={comments} classesParent="post-content" />
+							{/* <CommentsBlock data={comments} classesParent="post-content" /> */}
 						</div>
 					}
 				</div>
@@ -57,19 +70,16 @@ const PostPage = ({ post, comments }) => {
 	)
 }
 
-export const getInitialProps = wrapper.getInitialProps(store => 
+export const getServerSideProps = wrapper.getServerSideProps(store => 
 	async (context) => {
-		console.log(store.getState().posts.data)
-		console.log(context.params.postId, "ЭТО КОНТЕКСТ")
 		return {
-			props: {post: {}}
+			props: {postId:  context.params.postId}
 		}
 	}
 )
 
 PostPage.propTypes = {
-	post: PropTypes.object.isRequired,
-	comments: PropTypes.array.isRequired
+	postId: PropTypes.string.isRequired
 }
 
 export default PostPage

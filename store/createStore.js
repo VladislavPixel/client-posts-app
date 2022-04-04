@@ -1,10 +1,12 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import { createWrapper } from "next-redux-wrapper"
-import postsReducer from "./posts"
+import homePageReducer from "./homePage"
+import postPageReducer from "./postPage"
 import searchReducer from "./searchPosts"
 
 const rootReducer = combineReducers({
-	posts: postsReducer,
+	homePage: homePageReducer,
+	postPage: postPageReducer,
 	search: searchReducer
 })
 
@@ -14,4 +16,10 @@ export default function createStore() {
 	})
 }
 
-export const wrapper = createWrapper(createStore)
+const store = createStore()
+
+const initialStore = () => {
+	return store
+}
+
+export const wrapper = createWrapper(initialStore)
