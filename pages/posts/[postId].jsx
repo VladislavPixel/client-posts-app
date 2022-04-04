@@ -10,7 +10,7 @@ import { wrapper } from "../../store/createStore"
 import { useSelector, useDispatch } from "react-redux"
 import { getIsLoadingPost, fetchCurrentPost, getDataPost } from "../../store/postPage"
 
-const PostPage = ({ postId }) => {
+const PostPage = (props) => {
 	// Логика установка изображения поста
 	const refBlockPost = useRef(null)
 	const [isBigImg, setBigImg] = useState(true)
@@ -24,7 +24,7 @@ const PostPage = ({ postId }) => {
 	const post = useSelector(getDataPost())
 	useEffect(() => {
 		console.log("Пошел запрос на получение")
-		dispatch(fetchCurrentPost(postId))
+		dispatch(fetchCurrentPost(props.postId))
 	}, [])
 	useEffect(() => {
 		//if (refBlockPost.current.offsetWidth <= 400) setBigImg(false)
@@ -73,7 +73,7 @@ const PostPage = ({ postId }) => {
 export const getServerSideProps = wrapper.getServerSideProps(store => 
 	async (context) => {
 		return {
-			props: {postId:  context.params.postId}
+			props: {postId: context.params.postId}
 		}
 	}
 )

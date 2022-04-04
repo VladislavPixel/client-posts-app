@@ -43,9 +43,17 @@ export function fetchCurrentPost(id) {
 	return async (dispatch, state) => {
 		dispatch(postPageRequested())
 		const postForRequest = state().postPage.data.find(item => item.id === id)
+		const correctObject = { ...postForRequest }
+		delete correctObject.Count
 		try {
-			const postData = await postService.getPostByPayload(postForRequest)
-			console.log(postData)
+			// const postData = await postService.getPostByPayload(correctObject)
+			// console.log("ПОЛУЧИЛ ДАТУ", postData)
+			const responce = await fetch("http://localhost:8081/post", {
+				method: "POST",
+				body: JSON.stringify(correctObject)
+			})
+			const postData = await responce.json()
+			dispatch(setPostPage(postData))
 		} catch (err) {
 			const { message } = err
 			dispatch(postPageRequestField(message))
@@ -53,7 +61,7 @@ export function fetchCurrentPost(id) {
 	}
 }
 
-// Selectors 
+// Selectors
 export const getDataPost = () => {
 	return (state) => {
 		return state.postPage.currentPost
