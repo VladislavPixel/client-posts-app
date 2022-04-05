@@ -1,15 +1,16 @@
 import PropTypes from "prop-types"
 
-const PostTextAreaBlock = ({ value }) => {
+const PostTextAreaBlock = ({ value, onUpdateValue }) => {
 	return(
 		<div className="post-content__area-wrap">
-			<textarea className="post-content__area" name="newDescription">{value}</textarea>
+			<textarea onChange={onUpdateValue} className="post-content__area" value={value} name="newDescription">{value}</textarea>
 		</div>
 	)
 }
 
 PostTextAreaBlock.propTypes = {
-	value: PropTypes.string.isRequired
+	value: PropTypes.string.isRequired,
+	onUpdateValue: PropTypes.func.isRequired
 }
 
 export default PostTextAreaBlock

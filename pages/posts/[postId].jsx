@@ -45,8 +45,12 @@ const PostPage = ({ postId }) => {
 			fetchCurrentPost()
 		}
 	}, [])
+	const [valueArea, setValueArea] = useState(currentPost?.description)
 	const handlerSubmit = () => {
 
+	}
+	const handlerChangeArea = ({ target }) => {
+		setValueArea(target.value)
 	}
 	return (
 		<PostLayot>
@@ -68,7 +72,7 @@ const PostPage = ({ postId }) => {
 									{!isEdit ?
 										<p className="post-content__text">{currentPost.description}</p> :
 										<form onSubmit={handlerSubmit} className="post-content__form">
-											<PostTextAreaBlock value={currentPost.description} />
+											<PostTextAreaBlock onUpdateValue={handlerChangeArea} value={valueArea} />
 											<div className="post-content__container-btn btn-container">
 												<Button classesParent="btn-container" type="submit" text="Сохранить изменения" />
 												<Button classesParent="btn-container" type="button" text="Отменить" onCallFun={handlerModeEdit} />

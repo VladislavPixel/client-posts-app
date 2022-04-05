@@ -17,7 +17,11 @@ const userAuthSlice = createSlice({
 		},
 		userAuthReceived(state, action) {
 			state.isAuth = true,
-				state.ID = action.payload
+			state.ID = action.payload
+		},
+		userAuthSet(state, action) {
+			state.isAuth = true,
+			state.ID = action.payload
 		},
 		userAuthRequestField(state, action) {
 			state.error = action.payload
@@ -26,7 +30,7 @@ const userAuthSlice = createSlice({
 })
 
 const { actions, reducer: userAuthReducer } = userAuthSlice
-const { userAuthRequested, userAuthReceived, userAuthRequestField } = actions
+const { userAuthRequested, userAuthReceived, userAuthRequestField, userAuthSet } = actions
 
 // Actions
 export function userSignIn(dataUser) {
@@ -44,6 +48,12 @@ export function userSignIn(dataUser) {
 			const { message } = err
 			dispatch(userAuthRequestField(message))
 		}
+	}
+}
+export function setAuthUser() {
+	return async (dispatch) => {
+		const idUser = localStorageService.getId()
+		dispatch(userAuthSet(idUser))
 	}
 }
 

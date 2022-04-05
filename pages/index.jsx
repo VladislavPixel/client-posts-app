@@ -19,13 +19,12 @@ const HomePage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) => 
 	}
 	const [currentPagin, setCurrentPagin] = useState(1) // State Pagin
 	const MAX_POSTS_ON_PAGE = 10
-	const handlerUpdatePagin = (id) => setCurrentPagin(id)
-	// const newArrayPosts = getNewArrayPagins(
-	// 	MAX_POSTS_ON_PAGE,
-	// 	currentPagin,
-	// 	posts
-	// ) // PAGINATIONS
-	const handlerArrowPagins = (typeMethod) => {
+	const handlerUpdatePagin = async (id) => {
+		setCurrentPagin(id)
+		const posts = await postsService.getPostsByPage(id)
+		setPosts(posts)
+	}
+	const handlerArrowPagins = async (typeMethod) => {
 		if (typeMethod === "decrement") {
 			setCurrentPagin((prevState) => {
 				return prevState - 1
@@ -36,21 +35,29 @@ const HomePage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) => 
 				return prevState + 1
 			})
 		}
+		const posts = await postsService.getPostsByPage(currentPagin)
+		setPosts(posts)
 	}
 	useEffect(() => {
-		async function load() {
+		const load = async () => {
 			const posts = await postsService.getPostsByPage(1)
 			setPosts(posts)
 		}
-		if (!serverPosts) load()
-		async function loadLength() {
+		if (!serverPosts) {
+			load()
+		}
+		const loadLength = async () => {
 			const responceLengthValue = await fetch("http://localhost:8081/posts")
 			const value = await responceLengthValue.json()
 			setLengthPosts(value)
 		}
-		if (!serverLengthPosts) loadLength()
-		if (!posts || !lengthPosts) return <Spinner />
+		if (!serverLengthPosts) {
+			loadLength()
+		}
 	}, [])
+	if (!posts || !lengthPosts) {
+		return <Spinner />
+	}
 	return (
 		<HomeLayot>
 			<div className="content-container__block-posts posts-block">
