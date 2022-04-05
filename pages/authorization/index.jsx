@@ -3,8 +3,11 @@ import AuthorizationLayot from "../../layots/authorizationLayot"
 import Button from "../../components/common/button"
 import Router from "next/router"
 import FormComponent, { TextField } from "../../components/common/form"
+import { useDispatch } from "react-redux"
+import { userSignIn } from "../../store/userAuth"
 
 const AuthorizationPage = () => {
+	const dispatch = useDispatch()
 	const [dataAuth] = useState({
 		username: "",
 		password: ""
@@ -12,13 +15,15 @@ const AuthorizationPage = () => {
 	const handlerBackBtn = () => Router.push("/")
 	const icon = <img className="authorization-block__icon-btn" src="/icons/arrowDouble.svg" alt="Иконка двойной трелки" />
 	const handlerSubmitForm = (data) => {
-		console.log(data, "Пошла отправка данных")
+		console.log(data)
+		dispatch(userSignIn(data))
+		Router.push("/")
 	}
 	const configError = {
-		UserName: {
+		username: {
 			isRequired: { message: `Поле "Имя" обязательно для заполнения.` },
 		},
-		Password: {
+		password: {
 			isRequired: { message: `Поле "Пароль" обязательно для заполнения.` }
 		}
 	}
@@ -30,8 +35,8 @@ const AuthorizationPage = () => {
 					<h1 className="authorization-block__title title">Страница Авторизации</h1>
 					<div className="authorization-block__container-form">
 						<FormComponent config={configError} dataDefault={dataAuth} classesParent="authorization-block" onSubmit={handlerSubmitForm}>
-							<TextField classesParent="authorization-block" name="UserName" label="Имя пользователя:" placeholder="введите имя пользователя" />
-							<TextField isPassword={true} type="password" classesParent="authorization-block" name="Password" label="Пароль:" placeholder="введите пароль" />
+							<TextField classesParent="authorization-block" name="username" label="Имя пользователя:" placeholder="введите имя пользователя" />
+							<TextField isPassword={true} type="password" classesParent="authorization-block" name="password" label="Пароль:" placeholder="введите пароль" />
 							<button type="submit" className="authorization-block__button-sub">Авторизоваться</button>
 						</FormComponent>
 					</div>

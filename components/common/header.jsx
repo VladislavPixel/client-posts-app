@@ -4,12 +4,15 @@ import Search from "./search"
 import Button from "./button"
 import Router from "next/router"
 import { useRef, useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { getValueIsAuthUser } from "../../store/userAuth"
 
 const Header = ({ isSearch, isAuthBtn, isPostLayot }) => {
 	const refHeader = useRef(null)
 	const [isShow, setShow] = useState(true)
 	const [widthHeader, setWidthHeader] = useState(null)
 	const handlerAuthBtn = () => Router.push("/authorization")
+	const isAuth = useSelector(getValueIsAuthUser())
 	useEffect(() => {
 		setWidthHeader(refHeader.current.offsetWidth)
 	}, [])
@@ -35,7 +38,10 @@ const Header = ({ isSearch, isAuthBtn, isPostLayot }) => {
 					</div>
 					{isAuthBtn &&
 						<div className="header__row header__row_second">
-							<Button onCallFun={handlerAuthBtn} type="button" text="Авторизация" classesParent="header" />
+							{!isAuth ? 
+								<Button onCallFun={handlerAuthBtn} type="button" text="Авторизация" classesParent="header" /> :
+								<p className="header__message-auth">Вы авторизованы в сервисе просмотра постов!</p>
+							}
 						</div>
 					}
 				</div>

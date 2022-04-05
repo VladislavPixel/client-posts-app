@@ -1,14 +1,8 @@
 import PropTypes from "prop-types"
 import Link from "next/link"
-import { useDispatch } from "react-redux"
-import { setCurrentPost } from "../../store/postPage"
 
 const PostCard = ({ dataPost }) => {
 	const { id, title, description, Count } = dataPost
-	const dispatch = useDispatch()
-	const handlerClick = () => {
-		dispatch(setCurrentPost(dataPost))
-	}
 	return (
 		<div className="posts-block__column">
 			<div className="posts-block__card card-post">
@@ -18,7 +12,7 @@ const PostCard = ({ dataPost }) => {
 					</Link>
 				</div>
 				<div className="card-post__content post-content-card">
-					<Link onClick={handlerClick} href={`/posts/${id}`}>
+					<Link href={`/posts/[postId]`} as={`/posts/${id}`}>
 						<a><h3 className="post-content-card__title">{title}</h3></a>
 					</Link>
 					<p className="post-content-card__text">{description}</p>
@@ -27,7 +21,7 @@ const PostCard = ({ dataPost }) => {
 							<a className="card-actions__link"><img alt="Иконка комментария" className="card-actions__comment-icon" src="/icons/comment.svg" /></a>
 						</Link>
 						<span className="card-actions__number-comments">{Count}</span>
-						<Link href={`/posts/[postId]`}>
+						<Link href={`/posts/[postId]`} as={`/posts/${id}`}>
 							<a className="card-actions__link"><img alt="Иконка карандаша" className="card-actions__pencil-icon" src="/icons/pencil.svg" /></a>
 						</Link>
 					</div>

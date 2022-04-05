@@ -1,7 +1,10 @@
 import "../styles/style.scss"
-import { wrapper } from "../store/createStore"
 import Head from "next/head"
 import React from "react"
+import { Provider } from "react-redux"
+import createStore from "../store/createStore"
+
+const store = createStore()
 
 const MyApp = ({ Component, pageProps }) => {
 	return (
@@ -13,10 +16,12 @@ const MyApp = ({ Component, pageProps }) => {
 				<title>FastPost</title>
 			</Head>
 			<div className="wrapper">
-				<Component {...pageProps} />
+				<Provider store={store}>
+					<Component {...pageProps} />
+				</Provider>
 			</div>
 		</React.Fragment>
 	)
 }
 
-export default wrapper.withRedux(MyApp)
+export default MyApp

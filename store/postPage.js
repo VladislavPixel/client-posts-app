@@ -1,63 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { HYDRATE } from "next-redux-wrapper"
-import postService from "../services/post.service"
 
 const initialState = {
-	data: null,
-	currentPost: null,
-	isLoadingPost: true,
-	error: null
+	currentPost: null
 }
 
 const postPageSlice = createSlice({
 	name: "postPage",
 	initialState,
 	reducers: {
-		postPageRequested(state) {
-			state.isLoadingPost = true
-			state.error = null
-		},
-		setPostPage(state, action) {
+		setCurrentPost(state, action) {
 			state.currentPost = action.payload
-			state.isLoadingPost = false
-		},
-		postPageRequestField(state, action) {
-			state.error = action.payload
-			state.isLoadingPost = false
-		}
-	},
-	extraReducers: {
-		[HYDRATE]: (state, action) => {
-			if (!action.payload.homePage.data) return state
-			state.data = action.payload.homePage.data
-			state = { ...state, ...action.payload.homePage }
 		}
 	}
 })
 
 const { actions, reducer: postPageReducer } = postPageSlice
-const { setPostPage, postPageRequested, postPageRequestField } = actions
+const { setCurrentPost } = actions
 
 // Actions
-export function fetchCurrentPost(id) {
-	return async (dispatch, state) => {
-		dispatch(postPageRequested())
-		const postForRequest = state().postPage.data.find(item => item.id === id)
-		const correctObject = { ...postForRequest }
-		delete correctObject.Count
-		try {
-			// const postData = await postService.getPostByPayload(correctObject)
-			// console.log("ПОЛУЧИЛ ДАТУ", postData)
-			const responce = await fetch("http://localhost:8081/post", {
-				method: "POST",
-				body: JSON.stringify(correctObject)
-			})
-			const postData = await responce.json()
-			dispatch(setPostPage(postData))
-		} catch (err) {
-			const { message } = err
-			dispatch(postPageRequestField(message))
-		}
+export function setCurrentPostPage(data) {
+	return async (dispatch) => {
+		dispatch(setCurrentPost(data))
 	}
 }
 
@@ -65,11 +28,6 @@ export function fetchCurrentPost(id) {
 export const getDataPost = () => {
 	return (state) => {
 		return state.postPage.currentPost
-	}
-}
-export const getIsLoadingPost = () => {
-	return (state) => {
-		return state.postPage.isLoadingPost
 	}
 }
 

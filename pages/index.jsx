@@ -1,29 +1,25 @@
 import { useState, useEffect } from "react"
+import { useDispatch } from "react-redux"
 import HomeLayot from "../layots/homeLayot"
 import PostsList from "../components/ui/postsList"
-import getNewArrayPagins from "../utils/pagination"
 import Pagination from "../components/ui/pagination"
-import {
-	fetchAllPostsData,
-	getDataPosts,
-	setAllPostsLength,
-	getLengthPostsValue,
-	getStatusLoaderPosts
-} from "../store/homePage"
-import { getSearchValuePosts } from "../store/searchPosts"
-import { useDispatch, useSelector } from "react-redux"
-import { wrapper } from "../store/createStore"
 import Spinner from "../components/common/spinner"
+import postsService from "../services/posts.service"
+import { setPostsData, setLengthValue } from "../store/homePage"
 
-const HomePage = () => {
+const HomePage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) => {
+	const dispatch = useDispatch()
+	const [lengthPosts, setLengthPosts] = useState(serverLengthPosts)
+	const [posts, setPosts] = useState(serverPosts)
+	if (posts) {
+		dispatch(setPostsData(posts))
+	}
+	if (lengthPosts) {
+		dispatch(setLengthValue(lengthPosts))
+	}
 	const [currentPagin, setCurrentPagin] = useState(1) // State Pagin
-	const posts = useSelector(getDataPosts(currentPagin))
-	const loaderPosts = useSelector(getStatusLoaderPosts())
-	const lengthPostsAll = useSelector(getLengthPostsValue())
-	const valueSearchPosts = useSelector(getSearchValuePosts())
 	const MAX_POSTS_ON_PAGE = 10
 	const handlerUpdatePagin = (id) => setCurrentPagin(id)
-	const lengthPosts = lengthPostsAll
 	// const newArrayPosts = getNewArrayPagins(
 	// 	MAX_POSTS_ON_PAGE,
 	// 	currentPagin,
@@ -42,27 +38,34 @@ const HomePage = () => {
 		}
 	}
 	useEffect(() => {
-
-	}, [currentPagin])
+		async function load() {
+			const posts = await postsService.getPostsByPage(1)
+			setPosts(posts)
+		}
+		if (!serverPosts) load()
+		async function loadLength() {
+			const responceLengthValue = await fetch("http://localhost:8081/posts")
+			const value = await responceLengthValue.json()
+			setLengthPosts(value)
+		}
+		if (!serverLengthPosts) loadLength()
+		if (!posts || !lengthPosts) return <Spinner />
+	}, [])
 	return (
 		<HomeLayot>
 			<div className="content-container__block-posts posts-block">
 				<div className="posts-block__container _container">
-					{loaderPosts ? <Spinner /> :
-						<>
-							<PostsList data={posts} />
-							{
-								lengthPosts > 0 &&
-								<Pagination 
-									onArrow={handlerArrowPagins}
-									onUpdatePagin={handlerUpdatePagin}
-									current={currentPagin}
-									maxPosts={MAX_POSTS_ON_PAGE}
-									length={lengthPosts}
-									classesParent="posts-block"
-								/>
-							}
-						</>
+					<PostsList data={posts} />
+					{
+						lengthPosts > 0 &&
+						<Pagination 
+							onArrow={handlerArrowPagins}
+							onUpdatePagin={handlerUpdatePagin}
+							current={currentPagin}
+							maxPosts={MAX_POSTS_ON_PAGE}
+							length={lengthPosts}
+							classesParent="posts-block"
+						/>
 					}
 				</div>
 			</div>
@@ -70,16 +73,14 @@ const HomePage = () => {
 	)
 }
 
-export const getServerSideProps = wrapper.getServerSideProps(store => 
-	async (context) => {
-		if (!store.getState().homePage.data) {
-			await store.dispatch(fetchAllPostsData(1))
-		}
-		await store.dispatch(setAllPostsLength())
-		return {
-			props: {},
-		}
+HomePage.getInitialProps = async () => {
+	const posts = await postsService.getPostsByPage(1)
+	const responceLengthValue = await fetch(process.env.API_URL + "posts")
+	const value = await responceLengthValue.json()
+	return {
+		posts,
+		postsLengthAll: value.count
 	}
-)
+}
 
 export default HomePage

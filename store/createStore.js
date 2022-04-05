@@ -3,11 +3,13 @@ import { createWrapper } from "next-redux-wrapper"
 import homePageReducer from "./homePage"
 import postPageReducer from "./postPage"
 import searchReducer from "./searchPosts"
+import userAuthReducer from "./userAuth"
 
 const rootReducer = combineReducers({
 	homePage: homePageReducer,
 	postPage: postPageReducer,
-	search: searchReducer
+	search: searchReducer,
+	userAuth: userAuthReducer
 })
 
 export default function createStore() {
@@ -15,11 +17,3 @@ export default function createStore() {
 		reducer: rootReducer
 	})
 }
-
-const store = createStore()
-
-const initialStore = () => {
-	return store
-}
-
-export const wrapper = createWrapper(initialStore)
