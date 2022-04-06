@@ -1,15 +1,8 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit"
-import { createWrapper } from "next-redux-wrapper"
-import homePageReducer from "./homePage"
-import postPageReducer from "./postPage"
-import searchReducer from "./searchPosts"
-import userAuthReducer from "./userAuth"
+import postsReducer from "./posts"
 
 const rootReducer = combineReducers({
-	homePage: homePageReducer,
-	postPage: postPageReducer,
-	search: searchReducer,
-	userAuth: userAuthReducer
+	homePage: postsReducer
 })
 
 export default function createStore() {

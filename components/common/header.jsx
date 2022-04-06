@@ -12,7 +12,7 @@ const Header = ({ isSearch, isAuthBtn, isPostLayot }) => {
 	const [isShow, setShow] = useState(true)
 	const [widthHeader, setWidthHeader] = useState(null)
 	const handlerAuthBtn = () => Router.push("/authorization")
-	const isAuth = useSelector(getValueIsAuthUser())
+	const isAuth = false
 	useEffect(() => {
 		setWidthHeader(refHeader.current.offsetWidth)
 	}, [])

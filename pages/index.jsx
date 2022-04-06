@@ -1,29 +1,24 @@
 import { useState, useEffect } from "react"
-import { useDispatch } from "react-redux"
 import HomeLayot from "../layots/homeLayot"
 import PostsList from "../components/ui/postsList"
 import Pagination from "../components/ui/pagination"
-import Spinner from "../components/common/spinner"
 import postsService from "../services/posts.service"
-import { setPostsData, setLengthValue } from "../store/homePage"
+import { MAX_POSTS_ON_PAGE } from "../utils/core/variables"
+import { useDispatch } from "react-redux"
+import { setPostsData, setLengthValue } from "../store/posts"
+import Spinner from "../components/common/spinner"
 
 const HomePage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) => {
 	const dispatch = useDispatch()
-	const [lengthPosts, setLengthPosts] = useState(serverLengthPosts)
+	// STATES
 	const [posts, setPosts] = useState(serverPosts)
-	if (posts) {
-		dispatch(setPostsData(posts))
-	}
-	if (lengthPosts) {
-		dispatch(setLengthValue(lengthPosts))
-	}
-	const [currentPagin, setCurrentPagin] = useState(1) // State Pagin
-	const MAX_POSTS_ON_PAGE = 10
-	const handlerUpdatePagin = async (id) => {
-		setCurrentPagin(id)
-		const posts = await postsService.getPostsByPage(id)
-		setPosts(posts)
-	}
+	const [lengthAll, setLengthAll] = useState(serverLengthPosts)
+	const [currentPagin, setCurrentPagin] = useState(1)
+	// SET STORE, если данные есть
+	if (posts) dispatch(setPostsData(posts, currentPagin))
+	if (lengthAll) dispatch(setLengthValue(lengthAll))
+	// FOR PAGINATION
+	const handlerUpdatePagin = (newCurrentPagin) => setCurrentPagin(newCurrentPagin)
 	const handlerArrowPagins = async (typeMethod) => {
 		if (typeMethod === "decrement") {
 			setCurrentPagin((prevState) => {
@@ -35,42 +30,39 @@ const HomePage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) => 
 				return prevState + 1
 			})
 		}
-		const posts = await postsService.getPostsByPage(currentPagin)
-		setPosts(posts)
 	}
 	useEffect(() => {
-		const load = async () => {
-			const posts = await postsService.getPostsByPage(1)
+		const loadPostsData = async () => {
+			const posts = await postsService.getPostsByPage(currentPagin)
 			setPosts(posts)
 		}
-		if (!serverPosts) {
-			load()
+		const loadLengthAll = async () => {
+			const postsLengthAll = await postsService.getAllLength()
+			setLengthAll(postsLengthAll)
 		}
-		const loadLength = async () => {
-			const responceLengthValue = await fetch("http://localhost:8081/posts")
-			const value = await responceLengthValue.json()
-			setLengthPosts(value)
+		if (!serverPosts) {
+			loadPostsData()
 		}
 		if (!serverLengthPosts) {
-			loadLength()
+			loadLengthAll()
 		}
 	}, [])
-	if (!posts || !lengthPosts) {
-		return <Spinner />
-	}
+
+	// Если данные еще не получены
+	if (!posts || !lengthAll) return <Spinner />
 	return (
 		<HomeLayot>
 			<div className="content-container__block-posts posts-block">
 				<div className="posts-block__container _container">
 					<PostsList data={posts} />
 					{
-						lengthPosts > 0 &&
+						lengthAll > 0 &&
 						<Pagination 
 							onArrow={handlerArrowPagins}
 							onUpdatePagin={handlerUpdatePagin}
 							current={currentPagin}
 							maxPosts={MAX_POSTS_ON_PAGE}
-							length={lengthPosts}
+							length={lengthAll}
 							classesParent="posts-block"
 						/>
 					}
@@ -80,13 +72,15 @@ const HomePage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) => 
 	)
 }
 
-HomePage.getInitialProps = async () => {
+HomePage.getInitialProps = async ({ req }) => {
+	if (!req) {
+		return { posts: null, postsLengthAll: null }
+	}
 	const posts = await postsService.getPostsByPage(1)
-	const responceLengthValue = await fetch(process.env.API_URL + "posts")
-	const value = await responceLengthValue.json()
+	const postsLengthAll = await postsService.getAllLength()
 	return {
 		posts,
-		postsLengthAll: value.count
+		postsLengthAll
 	}
 }
 

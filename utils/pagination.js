@@ -1,4 +1,4 @@
-export default function getNewArrayPagins(maxElement, current, arr) {
+export default function getNewArray(maxElement, current, arr) {
 	const maxBorder = current * maxElement
 	const minBorder = maxBorder - maxElement
 
