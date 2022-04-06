@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import postsService from "../services/posts.service"
 
 const initialState = {
 	data: {},
@@ -6,7 +7,10 @@ const initialState = {
 	searchValuePostsTitle: {
 		title: "",
 		description: ""
-	}
+	},
+	dataPostsForTitle: [],
+	errorPostsForTitle: null,
+	dataPostsForTitleLoading: false
 }
 
 const postsSlice = createSlice({
@@ -25,12 +29,31 @@ const postsSlice = createSlice({
 		searchValuePostsTitleReceived(state, action) {
 			const objectConfig = { title: action.payload, description: "" }
 			state.searchValuePostsTitle = objectConfig
+		},
+		postsForTitleSearchRequested(state) {
+			state.errorPostsForTitle = null
+			state.dataPostsForTitleLoading = true
+		},
+		postsForTitleReceived(state, action) {
+			state.dataPostsForTitle = action.payload
+			state.dataPostsForTitleLoading = false
+		},
+		postsForTitleRequestField(state, action) {
+			state.errorPostsForTitle = action.payload
+			state.dataPostsForTitleLoading = false
 		}
 	}
 })
 
 const { actions, reducer: postsReducer } = postsSlice
-const { postsReceived, postsLengthValueReceived, searchValuePostsTitleReceived } = actions
+const {
+	postsReceived,
+	postsLengthValueReceived,
+	searchValuePostsTitleReceived,
+	postsForTitleSearchRequested,
+	postsForTitleReceived,
+	postsForTitleRequestField
+} = actions
 
 // Actions
 export function setPostsData(data, currentPage) {
@@ -46,6 +69,19 @@ export function setLengthValue(data) {
 export function setSearchValuePostsTitle(valueTxt) {
 	return (dispatch) => {
 		dispatch(searchValuePostsTitleReceived(valueTxt))
+	}
+}
+export function fetchDataPostsForTitle() {
+	return async (dispatch, getState) => {
+		dispatch(postsForTitleSearchRequested())
+		try {
+			const data = await postsService.getDataForTitle(getState().posts.searchValuePostsTitle)
+			console.log("ВЫЗВАЛ", data)
+			dispatch(postsForTitleReceived(data))
+		} catch (err) {
+			const { message } = err
+			dispatch(postsForTitleRequestField(message))
+		}
 	}
 }
 
@@ -73,7 +109,17 @@ export const getAllData = () => {
 }
 export const getSearchValuePostsTitle = () => {
 	return (state) => {
-		return state.posts.searchValuePostsTitle
+		return state.posts.searchValuePostsTitle.title
+	}
+}
+export const getDataPostsForTitle = () => {
+	return (state) => {
+		return state.posts.dataPostsForTitle
+	}
+}
+export const getDataPostsForTitleLoading = () => {
+	return (state) => {
+		return state.posts.dataPostsForTitleLoading
 	}
 }
 

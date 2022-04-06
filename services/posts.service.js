@@ -10,6 +10,10 @@ const postsService = {
 	getAllLength: async () => {
 		const { data } = await httpService.get(POSTS_END_POINT)
 		return data
+	},
+	getDataForTitle: async (body) => {
+		const { data } = await httpService.post(`${POSTS_END_POINT}search`, body)
+		return data
 	}
 }
 

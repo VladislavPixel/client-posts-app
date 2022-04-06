@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import Router from "next/router"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -10,14 +10,27 @@ import Button from "../../components/common/button"
 import Spinner from "../../components/common/spinner"
 // Auxiliary
 import postsService from "../../services/posts.service"
-import { setPostsData, getKeysArrayData, getAllData, setSearchValuePostsTitle } from "../../store/posts"
+import {
+	setPostsData,
+	getKeysArrayData,
+	getAllData,
+	setSearchValuePostsTitle,
+	getSearchValuePostsTitle,
+	getDataPostsForTitle,
+	fetchDataPostsForTitle,
+	getDataPostsForTitleLoading
+} from "../../store/posts"
 
 const PostsPage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) => {
 	const dispatch = useDispatch()
+	const valueSearch = useSelector(getSearchValuePostsTitle())
+	const dataPostsForTitle = useSelector(getDataPostsForTitle())
+	const loadingDataPostsForTitle = useSelector(getDataPostsForTitleLoading())
 	if (serverPosts) {
 		dispatch(setPostsData(serverPosts, 1))
 	}
 	// STATE
+	//const [loadingDataForTitle, setLoadingDataForTitle] = useState(false)
 	const [dataPosts, setDataPosts] = useState(serverPosts)
 	const [length, setLength] = useState(serverLengthPosts)
 	const [currentValue, setCurrentValue] = useState(1)
@@ -62,21 +75,27 @@ const PostsPage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) =>
 		}
 	}, [dataPosts, length])
 	if (loading) return <Spinner />
-	const handlerSearch = (value) => {
-		dispatch(setSearchValuePostsTitle(value))
-	}
+	// ОБРАБОТКА ПОИСКА
+	const handlerSearch = (value) => dispatch(setSearchValuePostsTitle(value))
+	const handlerSubmitSearch = () => dispatch(fetchDataPostsForTitle())
+	const correctData = (valueSearch !== "" ? dataPostsForTitle : dataPosts)
 	return (
 		<PostsLayot>
 			<div className="content-container__posts posts">
 				<div className="posts__container _container">
-					<h1 className="posts__title title">Посты</h1>
-					<Button onCallFun={handlerBackBtn} type="button" text="На главную" classesParent="posts__btn_back posts" />
-					<Search classesParent="posts" placeholder="Поиск по заголовку" onHandler={handlerSearch} />
-					<PostsList data={dataPosts} />
-					{dataPosts.length !== length &&
-						<div className="posts__wrap-btn">
-							<Button type="button" text="Больше постов" classesParent="posts" onCallFun={handlerMoreBtn} />
-						</div>
+					{loadingDataPostsForTitle ? <Spinner /> :
+						<React.Fragment>
+							<h1 className="posts__title title">Посты</h1>
+							<Button onCallFun={handlerBackBtn} type="button" text="На главную" classesParent="posts__btn_back posts" />
+							<Search classesParent="posts" placeholder="Поиск по заголовку" onHandler={handlerSearch} />
+							<Button classesParent="posts__btn_blue posts" text="Отправить" onCallFun={handlerSubmitSearch} type="button" />
+							<PostsList data={correctData} />
+							{dataPosts.length !== length &&
+								<div className="posts__wrap-btn">
+									<Button type="button" text="Больше постов" classesParent="posts" onCallFun={handlerMoreBtn} />
+								</div>
+							}
+						</React.Fragment>
 					}
 				</div>
 			</div>
