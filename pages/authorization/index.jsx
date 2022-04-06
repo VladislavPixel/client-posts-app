@@ -7,7 +7,9 @@ import AuthorizationLayot from "../../layots/authorizationLayot"
 import Button from "../../components/common/button"
 import FormComponent, { TextField } from "../../components/common/form"
 // Auxiliary
-import { userSignIn } from "../../store/userAuth"
+import authService from "../../services/auth.service"
+import localStorageService from "../../services/localStorage.service"
+import { setAuthUser } from "../../store/userAuth"
 
 const AuthorizationPage = () => {
 	const dispatch = useDispatch()
@@ -17,8 +19,10 @@ const AuthorizationPage = () => {
 	})
 	const handlerBackBtn = () => Router.push("/")
 	const icon = <img className="authorization-block__icon-btn" src="/icons/arrowDouble.svg" alt="Иконка двойной трелки" />
-	const handlerSubmitForm = (data) => {
-		dispatch(userSignIn(data))
+	const handlerSubmitForm = async (data) => {
+		const data = await authService.signIn(data)
+		localStorageService.setAuth(data)
+		dispatch(setAuthUser())
 		Router.push("/")
 	}
 	const configError = {

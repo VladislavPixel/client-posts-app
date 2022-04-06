@@ -1,19 +1,29 @@
 import PropTypes from "prop-types"
 import { useRef, useEffect, useState } from "react"
 import Link from "next/link"
+import { useDispatch } from "react-redux"
 
 // Components
 import Search from "./search"
 import Button from "./button"
 import Router from "next/router"
+// Auxiliary
+import localStorageService from "../../services/localStorage.service"
+import { setAuthUser } from "../../store/userAuth"
 
 const Header = ({ isSearch, isAuthBtn, isPostLayot, valueSearch, onChangeSearch, onResetSearch }) => {
+	const dispatch = useDispatch()
 	const refHeader = useRef(null)
 	const [isShow, setShow] = useState(true)
 	const [widthHeader, setWidthHeader] = useState(null)
+	const [isAuth, setAuth] = useState(false)
+
 	const handlerAuthBtn = () => Router.push("/authorization")
-	const isAuth = false
 	useEffect(() => {
+		if (localStorageService.getToken() !== null) {
+			setAuth(true)
+			dispatch(setAuthUser())
+		}
 		setWidthHeader(refHeader.current?.offsetWidth)
 	}, [])
 	useEffect(() => {
@@ -38,7 +48,7 @@ const Header = ({ isSearch, isAuthBtn, isPostLayot, valueSearch, onChangeSearch,
 					</div>
 					{isAuthBtn &&
 						<div className="header__row header__row_second">
-							{!isAuth ? 
+							{!isAuth ?
 								<Button onCallFun={handlerAuthBtn} type="button" text="Авторизация" classesParent="header" /> :
 								<p className="header__message-auth">Вы авторизованы в сервисе просмотра постов!</p>
 							}

@@ -1,10 +1,9 @@
 const TOKEN_KEY = "tokenForUser"
 const ID_KEY = "id"
 
-
-function setUserAuth({ ID, Token }) {
-	localStorage.setItem(TOKEN_KEY, Token)
-	localStorage.setItem(ID_KEY, ID)
+function setUserAuth({ id, token }) {
+	localStorage.setItem(TOKEN_KEY, token)
+	localStorage.setItem(ID_KEY, id)
 }
 
 function getCurrentToken() {

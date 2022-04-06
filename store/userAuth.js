@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit"
 import localStorageService from "../services/localStorage.service"
+import authService from "../services/auth.service"
 
 const initialState = {
 	isAuth: false,
-	ID: null,
+	id: null,
 	error: null
 }
 
@@ -17,11 +18,11 @@ const userAuthSlice = createSlice({
 		},
 		userAuthReceived(state, action) {
 			state.isAuth = true,
-			state.ID = action.payload
+			state.id = action.payload
 		},
 		userAuthSet(state, action) {
 			state.isAuth = true,
-			state.ID = action.payload
+			state.id = action.payload
 		},
 		userAuthRequestField(state, action) {
 			state.error = action.payload
@@ -37,13 +38,10 @@ export function userSignIn(dataUser) {
 	return async (dispatch) => {
 		dispatch(userAuthRequested())
 		try {
-			const response = await fetch(process.env.API_URL + "login", {
-				method: "POST",
-				body: JSON.stringify(dataUser)
-			})
-			const jsonData = await response.json()
-			localStorageService.setAuth(jsonData)
-			dispatch(userAuthReceived(jsonData.ID))
+			const data = await authService.signIn(dataUser)
+			if (data === null) throw "Unauthorized"
+			localStorageService.setAuth(data)
+			dispatch(userAuthReceived(data.id))
 		} catch (err) {
 			const { message } = err
 			dispatch(userAuthRequestField(message))
