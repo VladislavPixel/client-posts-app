@@ -9,7 +9,7 @@ const PostTextAreaBlock = ({ value, onUpdateValue }) => {
 }
 
 PostTextAreaBlock.propTypes = {
-	value: PropTypes.string.isRequired,
+	value: PropTypes.string,
 	onUpdateValue: PropTypes.func.isRequired
 }
 

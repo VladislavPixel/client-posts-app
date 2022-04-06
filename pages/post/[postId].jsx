@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import PropTypes from "prop-types"
 import { useRouter } from "next/router"
+import { useDispatch, useSelector } from "react-redux"
 
 // Components
 import PostLayot from "../../layots/postLayot"
@@ -11,12 +12,37 @@ import CommentsBlock from "../../components/ui/commentsBlock"
 import Spinner from "../../components/common/spinner"
 // Auxiliary
 import postService from "../../services/post.service"
+import postsService from "../../services/posts.service"
+import localStorageService from "../../services/localStorage.service"
+import { setAuthUser } from "../../store/userAuth"
+import { updateElementPost, getAllData, setPostsData } from "../../store/posts"
 
 const PostPage = ({ post: postServer }) => {
+	const dispatch = useDispatch()
 	const router = useRouter()
 	// STATE
 	const [currentPost, setCurrentPost] = useState(postServer)
+	const [postDescription, setPostDescription] = useState(currentPost?.description)
 	const [isBigImg, setBigImg] = useState(true)
+	const [isAuth, setAuth] = useState(false)
+
+	// REDUX
+	const dataAll = useSelector(getAllData())
+	// Handlers form
+	const handlerSubmitForm = async () => {
+		if (dataAll[currentPost.group]) {
+			dispatch(updateElementPost(currentPost, postDescription))
+		} else {
+			const data = await postsService.getPostsByPage(currentPost.group)
+			dispatch(setPostsData(data, currentPost.group))
+			dispatch(updateElementPost(currentPost, postDescription))
+		}
+		setCurrentPost(prevState => {
+			return { ...prevState, description: postDescription }
+		})
+		setEdit(prevState => !prevState)
+	}
+	const handlerChangeDescription = ({ target }) => setPostDescription(prevState => target.value)
 
 	// Логика установка изображения поста
 	const refBlockPost = useRef(null)
@@ -24,9 +50,16 @@ const PostPage = ({ post: postServer }) => {
 
 	// Update mode = обновление post
 	const [isEdit, setEdit] = useState(false)
-	const handlerModeEdit = () => setEdit(prevState => !prevState)
+	const handlerModeEdit = () => {
+		setEdit(prevState => !prevState)
+		setPostDescription(currentPost.description)
+	}
 
 	useEffect(() => { // Комбинация клиента, на случай если сервер не делал рендер
+		if (localStorageService.getToken() !== null) {
+			setAuth(true)
+			dispatch(setAuthUser())
+		}
 		const loadPost = async () => {
 			const post = await postService.getPostById(router.query.postId)
 			setCurrentPost(post)
@@ -58,14 +91,14 @@ const PostPage = ({ post: postServer }) => {
 								{!isEdit ?
 									<p className="post-content__text">{currentPost.description}</p> :
 									<form className="post-content__form">
-										<PostTextAreaBlock value={currentPost.description} />
+										<PostTextAreaBlock value={postDescription} onUpdateValue={handlerChangeDescription} />
 										<div className="post-content__container-btn btn-container">
-											<Button classesParent="btn-container" type="submit" text="Сохранить изменения" />
+											<Button onCallFun={handlerSubmitForm} classesParent="btn-container" type="button" text="Сохранить изменения" />
 											<Button classesParent="btn-container" type="button" text="Отменить" onCallFun={handlerModeEdit} />
 										</div>
 									</form>
 								}
-								{!isEdit &&
+								{isAuth && !isEdit &&
 									<button onClick={handlerModeEdit} type="button" className="post-content__btn">
 										<img className="post-content__icon-btn" src="/icons/pencilPink.svg" alt="pink pencil icon" />
 										Редактировать текст

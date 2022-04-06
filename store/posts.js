@@ -17,12 +17,22 @@ const postsSlice = createSlice({
 		},
 		postsLengthValueReceived(state, action) {
 			state.lengthValue = action.payload
+		},
+		postUpdated(state, action) {
+			const groupArray = state.data[action.payload.post.group]
+			const newArray = groupArray.map(item => {
+				if (item.id === action.payload.post.id) {
+					return { ...item, description: action.payload.newDescription }
+				}
+				return item
+			})
+			state.data[action.payload.post.group] = newArray
 		}
 	}
 })
 
 const { actions, reducer: postsReducer } = postsSlice
-const { postsReceived, postsLengthValueReceived } = actions
+const { postsReceived, postsLengthValueReceived, postUpdated } = actions
 
 // Actions
 export function setPostsData(data, currentPage) {
@@ -33,6 +43,11 @@ export function setPostsData(data, currentPage) {
 export function setLengthValue(data) {
 	return (dispatch) => {
 		dispatch(postsLengthValueReceived(data))
+	}
+}
+export function updateElementPost(post, newDescription) {
+	return (dispatch) => {
+		dispatch(postUpdated({ post, newDescription }))
 	}
 }
 
