@@ -11,7 +11,7 @@ const PostCard = ({ id, title, description, commented }) => {
 					</Link>
 				</div>
 				<div className="card-post__content">
-					<div className="card-post__content post-content-card">
+					<div className="card-post__card-content post-content-card">
 						<Link href={`/post/[postId]`} as={`/post/${id}`}>
 							<a><h3 className="post-content-card__title">{title}</h3></a>
 						</Link>
