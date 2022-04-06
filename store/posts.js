@@ -2,7 +2,11 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
 	data: {},
-	lengthValue: null
+	lengthValue: null,
+	searchValuePostsTitle: {
+		title: "",
+		description: ""
+	}
 }
 
 const postsSlice = createSlice({
@@ -17,22 +21,31 @@ const postsSlice = createSlice({
 		},
 		postsLengthValueReceived(state, action) {
 			state.lengthValue = action.payload
+		},
+		searchValuePostsTitleReceived(state, action) {
+			const objectConfig = { title: action.payload, description: "" }
+			state.searchValuePostsTitle = objectConfig
 		}
 	}
 })
 
 const { actions, reducer: postsReducer } = postsSlice
-const { postsReceived, postsLengthValueReceived } = actions
+const { postsReceived, postsLengthValueReceived, searchValuePostsTitleReceived } = actions
 
 // Actions
 export function setPostsData(data, currentPage) {
-	return async (dispatch) => {
+	return (dispatch) => {
 		dispatch(postsReceived({ data, currentPage }))
 	}
 }
 export function setLengthValue(data) {
-	return async (dispatch) => {
+	return (dispatch) => {
 		dispatch(postsLengthValueReceived(data))
+	}
+}
+export function setSearchValuePostsTitle(valueTxt) {
+	return (dispatch) => {
+		dispatch(searchValuePostsTitleReceived(valueTxt))
 	}
 }
 
@@ -45,6 +58,22 @@ export const getDataPosts = (idPage) => {
 export const getLengthAll = () => {
 	return (state) => {
 		return state.posts.lengthValue
+	}
+}
+export const getKeysArrayData = () => {
+	return (state) => {
+		const arrKeys = Object?.keys(state.posts?.data)
+		return arrKeys
+	}
+}
+export const getAllData = () => {
+	return (state) => {
+		return state.posts.data
+	}
+}
+export const getSearchValuePostsTitle = () => {
+	return (state) => {
+		return state.posts.searchValuePostsTitle
 	}
 }
 

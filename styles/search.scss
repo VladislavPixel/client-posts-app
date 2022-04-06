@@ -5,8 +5,9 @@
 		border-radius: 10px;
 		display: flex;
 		align-items: center;
-		padding: 14px 16px 14px 8px;
+		padding: 14px 35px 14px 8px;
 		border: 2px solid transparent;
+		position: relative;
 		@media(min-width: 992px){
 			&:hover{
 				border: 2px solid rgba(60, 60, 67, 0.399);
@@ -21,5 +22,21 @@
 		line-height: 22px;
 		color: rgba(60, 60, 67, 0.6);
 		width: 100%;
+	}
+	&__input-wrap{
+		width: 100%;
+	}
+	&__flag{
+		position: absolute;
+		font-size: 20px;
+		padding: 8px;
+		background: rgb(112, 112, 112);
+		color: azure;
+		border-radius: 50%;
+		cursor: pointer;
+		right: 3px;
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 30;
 	}
 }

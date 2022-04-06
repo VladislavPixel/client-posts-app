@@ -3,8 +3,8 @@ import httpService from "./http.service"
 const POST_AND_POINT = "post/"
 
 const postService = {
-	getPostByPayload: async (body) => {
-		const { data } = await httpService.post(POST_AND_POINT, body)
+	getPostById: async (id) => {
+		const { data } = await httpService.post(POST_AND_POINT + id)
 		return data
 	}
 }

@@ -14,8 +14,8 @@ const TextField = ({ name, label, placeholder, classesParent, type, value, error
 		}
 	}
 	const getIcon = () => {
-		if (stateIconPass === "show") return <img onClick={handlerIcon} src="/icons/icon-eye.svg" alt="Иконка человеческого глаза." />
-		if (stateIconPass === "noShow") return <img onClick={handlerIcon} src="/icons/icon-eye-slash.svg" alt="Иконка перечерктнутого человеческого глаза." />
+		if (stateIconPass === "show") return <img onClick={handlerIcon} src="/icons/icon-eye.svg" alt="Human eye icon." />
+		if (stateIconPass === "noShow") return <img onClick={handlerIcon} src="/icons/icon-eye-slash.svg" alt="Crossed out human eye icon." />
 	}
 	const typeCorrect = (type === "password" && stateIconPass === "noShow") ? "text" : (type === "password" && stateIconPass === "show") ? "password" : "text"
 	return (

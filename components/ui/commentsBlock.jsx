@@ -13,8 +13,8 @@ const CommentsBlock = ({ data, classesParent }) => {
 CommentsBlock.propTypes = {
 	data: PropTypes.oneOfType([
 		PropTypes.array,
-		PropTypes.oneOf([null])
-	]),
+		PropTypes.oneOf([undefined])
+	]).isRequired,
 	classesParent: PropTypes.string.isRequired
 }
 

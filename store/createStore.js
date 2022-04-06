@@ -2,7 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import postsReducer from "./posts"
 
 const rootReducer = combineReducers({
-	homePage: postsReducer
+	posts: postsReducer
 })
 
 export default function createStore() {

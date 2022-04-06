@@ -4,10 +4,10 @@ import Comment from "./comment"
 
 const CommentsList = ({ dataComments }) => {
 	return (
-		(!dataComments || dataComments.length === 0) ?
-			<SmallMessage classesParent="block-comments" iconPath="/icons/comments.svg" title="Комментарии отсутствуют" offer="Оставьте комментарий, будьте первым" altIcon="Иконка комментариев" /> :
+		(!dataComments &&
+			<SmallMessage classesParent="block-comments" iconPath="/icons/comments.svg" title="Комментарии отсутствуют" offer="Оставьте комментарий, будьте первым" altIcon="Иконка комментариев" />) ||
 			<div className="block-comments__list">
-				{dataComments.map(comment => <Comment key={comment.ID} {...comment} />)}
+				{dataComments.map(comment => <Comment key={comment.id} {...comment} />)}
 			</div>
 	)
 }
@@ -15,8 +15,8 @@ const CommentsList = ({ dataComments }) => {
 CommentsList.propTypes = {
 	dataComments: PropTypes.oneOfType([
 		PropTypes.array,
-		PropTypes.oneOf([null])
-	])
+		PropTypes.oneOf([undefined])
+	]).isRequired
 }
 
 export default CommentsList

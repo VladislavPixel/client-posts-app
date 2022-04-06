@@ -1,41 +1,79 @@
+import { useEffect, useState } from "react"
+import Router from "next/router"
+import { useDispatch, useSelector } from "react-redux"
+
+// Components
 import PostsLayot from "../../layots/postsLayot"
 import Search from "../../components/common/search"
 import PostsList from "../../components/ui/postsList"
 import Button from "../../components/common/button"
-import { useState } from "react"
-import { wrapper } from "../../store/createStore"
-import { useSelector } from "react-redux"
-import { fetchAllPostsData, getDataPosts } from "../../store/posts"
+import Spinner from "../../components/common/spinner"
+// Auxiliary
+import postsService from "../../services/posts.service"
+import { setPostsData, getKeysArrayData, getAllData, setSearchValuePostsTitle } from "../../store/posts"
 
-const PostsPage = () => {
-	const posts = useSelector(getDataPosts())
-	const MAX_POSTS = 9
-	const getCorrectData = (array) => {
-		let dataFilter
-		if (array.length <= MAX_POSTS) {
-			dataFilter = array
-		} else {
-			dataFilter = array.filter((el, index) => index < MAX_POSTS)
-		}
-		return dataFilter
+const PostsPage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) => {
+	const dispatch = useDispatch()
+	if (serverPosts) {
+		dispatch(setPostsData(serverPosts, 1))
 	}
-	const [dataPosts, setDataPosts] = useState(getCorrectData(posts))
-	const handlerMoreBtn = () => {
-		setDataPosts((prevState) => {
-			return [
-				...prevState,
-				...posts.filter((el, index) => index >= prevState.length && index < prevState.length + MAX_POSTS)
-			]
-		})
+	// STATE
+	const [dataPosts, setDataPosts] = useState(serverPosts)
+	const [length, setLength] = useState(serverLengthPosts)
+	const [currentValue, setCurrentValue] = useState(1)
+	const [loading, setLoading] = useState(true)
+	const keys = useSelector(getKeysArrayData())
+	const dataAll = useSelector(getAllData())
+	if (!dataPosts && keys.length !== 0) {
+		let arr = []
+		for (const key of keys) {
+			arr.push(...dataAll[key])
+		}
+		setDataPosts(arr)
+		setCurrentValue(arr[arr.length - 1].group)
+	}
+
+	const handlerMoreBtn = async () => {
+		const posts = await postsService.getPostsByPage(currentValue + 1)
+		dispatch(setPostsData(posts, currentValue + 1))
+		setCurrentValue(prevState => prevState + 1)
+		setDataPosts([...dataPosts, ...posts])
+	}
+	const handlerBackBtn = () => Router.push("/")
+
+	useEffect(() => { // Если сервер не запустит рендер, данные будут получены на клиенте
+		const loadDataPosts = async () => {
+			const posts = await postsService.getPostsByPage(1)
+			dispatch(setPostsData(posts, 1))
+			setDataPosts(posts)
+		}
+		const loadLengthValue = async () => {
+			const postsLengthAll = await postsService.getAllLength()
+			setLength(postsLengthAll)
+		}
+		if (!dataPosts) loadDataPosts()
+		if (!length) loadLengthValue()
+	}, [])
+
+	// Если данные еще не получены
+	useEffect(() => {
+		if (dataPosts && (length !== null)) {
+			setLoading(false)
+		}
+	}, [dataPosts, length])
+	if (loading) return <Spinner />
+	const handlerSearch = (value) => {
+		dispatch(setSearchValuePostsTitle(value))
 	}
 	return (
 		<PostsLayot>
 			<div className="content-container__posts posts">
 				<div className="posts__container _container">
 					<h1 className="posts__title title">Посты</h1>
-					<Search classesParent="posts" />
+					<Button onCallFun={handlerBackBtn} type="button" text="На главную" classesParent="posts__btn_back posts" />
+					<Search classesParent="posts" placeholder="Поиск по заголовку" onHandler={handlerSearch} />
 					<PostsList data={dataPosts} />
-					{dataPosts.length !== posts.length &&
+					{dataPosts.length !== length &&
 						<div className="posts__wrap-btn">
 							<Button type="button" text="Больше постов" classesParent="posts" onCallFun={handlerMoreBtn} />
 						</div>
@@ -46,13 +84,16 @@ const PostsPage = () => {
 	)
 }
 
-export const getStaticProps = wrapper.getStaticProps(store => 
-	async (context) => {
-		await store.dispatch(fetchAllPostsData())
-		return {
-			props: {},
-		}
+PostsPage.getInitialProps = async ({ req }) => {
+	if (!req) {
+		return { posts: null, postsLengthAll: null }
 	}
-)
+	const posts = await postsService.getPostsByPage(1)
+	const postsLengthAll = await postsService.getAllLength()
+	return {
+		posts,
+		postsLengthAll
+	}
+}
 
 export default PostsPage
