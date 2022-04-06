@@ -2,6 +2,9 @@
 npm i из корня
 npm run dev
 
+Если запуск через Dockerfile:
+docker build -t client-posts-app .
+docker run -d -p 3000:3000 --name client-posts-app --rm client-posts-app
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
