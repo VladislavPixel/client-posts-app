@@ -18,6 +18,14 @@
 	&__pagination{
 		margin-top: 40px;
 	}
+	&__btn{
+		&_submit{
+			background: linear-gradient(135deg, #00FFAA 0%, #4579F5 53.01%, #9C42F5 99.83%);
+			font-weight: 600;
+			border: 1px solid #4579F5;
+			margin-bottom: 15px;
+		}
+	}
 }
 
 .card-post{

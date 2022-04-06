@@ -1,7 +1,9 @@
 import React from "react"
+import PropTypes from "prop-types"
+
+// Components
 import WrapperContent from "../components/HOC/wrapperContent"
 import Footer from "../components/common/footer"
-import PropTypes from "prop-types"
 
 const PostsLayot = ({ children }) => {
 	return (

@@ -1,13 +1,13 @@
 import React from "react"
 import PropTypes from "prop-types"
-import Header from "../components/common/header"
+
+// Components
 import WrapperContent from "../components/HOC/wrapperContent"
 import Footer from "../components/common/footer"
 
 const HomeLayot = ({ children }) => {
 	return (
 		<React.Fragment>
-			<Header />
 			<WrapperContent>
 				{children}
 			</WrapperContent>

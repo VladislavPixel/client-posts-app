@@ -1,4 +1,6 @@
 import Router from "next/router"
+
+// Components
 import Button from "../components/common/button"
 
 const NotFoundPage = () => {

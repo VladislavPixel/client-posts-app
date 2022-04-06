@@ -75,7 +75,7 @@ const PostsPage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) =>
 	// ОБРАБОТКА ПОИСКА
 	const handlerSubmitSearch = async () => {
 		setLoadingDataForTitle(true)
-		const newArrayDataPosts = await postsService.getDataForTitle({ title: valueSearch, description: "" })
+		const newArrayDataPosts = await postsService.getDataForSearch({ title: valueSearch, description: "" })
 		setDataPostsSearch(newArrayDataPosts)
 		setLoadingDataForTitle(false)
 	}

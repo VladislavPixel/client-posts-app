@@ -1,5 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
+
+// Components
 import Header from "../components/common/header"
 import WrapperContent from "../components/HOC/wrapperContent"
 import Footer from "../components/common/footer"

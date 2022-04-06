@@ -1,32 +1,25 @@
 import PropTypes from "prop-types"
 import { useRef, useEffect, useState } from "react"
 import Link from "next/link"
-import { useDispatch } from "react-redux"
 
 // Components
 import Search from "./search"
 import Button from "./button"
 import Router from "next/router"
-// Auxiliary
-import { setSearchValuePostsTitle } from "../../store/posts"
 
-const Header = ({ isSearch, isAuthBtn, isPostLayot }) => {
-	const dispatch = useDispatch()
+const Header = ({ isSearch, isAuthBtn, isPostLayot, valueSearch, onChangeSearch, onResetSearch }) => {
 	const refHeader = useRef(null)
 	const [isShow, setShow] = useState(true)
 	const [widthHeader, setWidthHeader] = useState(null)
 	const handlerAuthBtn = () => Router.push("/authorization")
 	const isAuth = false
 	useEffect(() => {
-		setWidthHeader(refHeader.current.offsetWidth)
+		setWidthHeader(refHeader.current?.offsetWidth)
 	}, [])
 	useEffect(() => {
 		if (widthHeader <= 400 && isPostLayot) setShow(false)
 		if (widthHeader > 400 && isPostLayot) setShow(true)
 	}, [widthHeader, isPostLayot])
-	const handlerSearch = (value) => {
-		dispatch(setSearchValuePostsTitle(value))
-	}
 	return (
 		isShow ?
 			<header ref={refHeader} className="header">
@@ -36,7 +29,7 @@ const Header = ({ isSearch, isAuthBtn, isPostLayot }) => {
 							<Link href="/"><a className="header__logo">Logo</a></Link>
 						</div>
 						<div className="header__column header__column_second">
-							{isSearch && <Search classesParent="header" placeholder="Поиск по заголовку" onHandler={handlerSearch} />}
+							{isSearch && <Search onReset={onResetSearch} onChange={onChangeSearch} value={valueSearch} classesParent="header" placeholder="Поиск по тексту" />}
 							<div className="header__posts-link link-posts">
 								<img className="link-posts__icon" src="/icons/postsIcon.svg" alt="Posts icon" />
 								<Link href="/posts"><a className="link-posts__ref">Посты</a></Link>
@@ -65,7 +58,10 @@ Header.defaultProps = {
 Header.propTypes = {
 	isSearch: PropTypes.bool.isRequired,
 	isAuthBtn: PropTypes.bool.isRequired,
-	isPostLayot: PropTypes.bool.isRequired
+	isPostLayot: PropTypes.bool.isRequired,
+	valueSearch: PropTypes.string,
+	onChangeSearch: PropTypes.func,
+	onResetSearch: PropTypes.func
 }
 
 export default Header

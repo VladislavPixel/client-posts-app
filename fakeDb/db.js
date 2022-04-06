@@ -3,7 +3,7 @@ const posts = [
 		id: "32424",
 		title: "JavaScript top language",
 		created: "1454357657",
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit fdgfdgd gdfgfdgd dfgfdg dfgfdg dfgfdg paint fdgvcbvcwerqeq dfgnbmnbzzx retu fdgcvbvb",
+		description: "Мультипарадигменный язык программирования. Поддерживает объектно-ориентированный, императивный и функциональный стили. Является реализацией спецификации ECMAScript. JavaScript обычно используется как встраиваемый язык для программного доступа к объектам приложений.",
 		userId: "13435768bvn",
 		commented: ["dfgdfgdfg9991", "dfgdfgdfgtryyut2"],
 		group: 1
@@ -12,7 +12,7 @@ const posts = [
 		id: "678",
 		title: "React",
 		created: "1454357657",
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit fdgfdgd gdfgfdgd dfgfdg dfgfdg dfgfdg paint fdgvcbvcwerqeq dfgnbmnbzzx retu fdgcvbvb",
+		description: "React — JavaScript-библиотека с открытым исходным кодом для разработки пользовательских интерфейсов. React разрабатывается и поддерживается Facebook, Instagram и сообществом отдельных разработчиков и корпораций. React может использоваться для разработки одностраничных и мобильных приложений.",
 		userId: "13435768bvn",
 		commented: ["dfgdfgdfgапрар4", "dfgdfgdfgсми3"],
 		group: 1
@@ -21,7 +21,7 @@ const posts = [
 		id: "45654",
 		title: "Go — компилируемый многопоточный язык программирования",
 		created: "1454357657",
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit fdgfdgd gdfgfdgd dfgfdg dfgfdg dfgfdg paint fdgvcbvcwerqeq dfgnbmnbzzx retu fdgcvbvb",
+		description: "Go — компилируемый многопоточный язык программирования, разработанный внутри компании Google. Разработка Go началась в сентябре 2007 года, его непосредственным проектированием занимались Роберт Гризмер, Роб Пайк и Кен Томпсон, занимавшиеся до этого проектом разработки операционной системы Inferno",
 		userId: "13435768bvn",
 		commented: ["dfgdfgdfgапрар4980980"],
 		group: 1

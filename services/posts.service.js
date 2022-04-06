@@ -11,7 +11,7 @@ const postsService = {
 		const { data } = await httpService.get(POSTS_END_POINT)
 		return data
 	},
-	getDataForTitle: async (body) => {
+	getDataForSearch: async (body) => {
 		const { data } = await httpService.post(`${POSTS_END_POINT}search`, body)
 		return data
 	}

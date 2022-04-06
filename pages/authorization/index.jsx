@@ -1,9 +1,12 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
+import Router from "next/router"
+
+// Components
 import AuthorizationLayot from "../../layots/authorizationLayot"
 import Button from "../../components/common/button"
-import Router from "next/router"
 import FormComponent, { TextField } from "../../components/common/form"
-import { useDispatch } from "react-redux"
+// Auxiliary
 import { userSignIn } from "../../store/userAuth"
 
 const AuthorizationPage = () => {
@@ -15,7 +18,6 @@ const AuthorizationPage = () => {
 	const handlerBackBtn = () => Router.push("/")
 	const icon = <img className="authorization-block__icon-btn" src="/icons/arrowDouble.svg" alt="Иконка двойной трелки" />
 	const handlerSubmitForm = (data) => {
-		console.log(data)
 		dispatch(userSignIn(data))
 		Router.push("/")
 	}
