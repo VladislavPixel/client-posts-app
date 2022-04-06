@@ -14,9 +14,15 @@
 	&__title{
 		margin-bottom: 15px;
 	}
+	&__search-container{
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		margin-bottom: 10px;
+	}
 	&__search{
 		max-width: 400px;
-		margin-bottom: 20px;
+		margin-right: 7px;
 		@media(max-width: 430px) {
 				.search-block__wrap{
 					padding: 7px 30px 7px 16px;
@@ -43,6 +49,8 @@
 			padding: 3px;
 			margin-bottom: 10px;
 			background: blueviolet;
+			border: 1px solid blueviolet;
+			margin-bottom: 0;
 		}
 	}
 }

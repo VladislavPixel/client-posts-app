@@ -1,13 +1,15 @@
 import React from "react"
-import WrapperContent from "../components/HOC/wrapperContent"
 import PropTypes from "prop-types"
-import Header from "../components/common/header"
+
+// Components
+import WrapperContent from "../components/HOC/wrapperContent"
 import Footer from "../components/common/footer"
+import Header from "../components/common/header"
 
 const PostLayot = ({ children }) => {
 	return (
 		<React.Fragment>
-			<Header isPostLayot={true} />
+			<Header isPostLayot={true} isSearch={false} />
 			<WrapperContent>
 				{children}
 			</WrapperContent>

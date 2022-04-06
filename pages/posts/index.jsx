@@ -10,31 +10,20 @@ import Button from "../../components/common/button"
 import Spinner from "../../components/common/spinner"
 // Auxiliary
 import postsService from "../../services/posts.service"
-import {
-	setPostsData,
-	getKeysArrayData,
-	getAllData,
-	setSearchValuePostsTitle,
-	getSearchValuePostsTitle,
-	getDataPostsForTitle,
-	fetchDataPostsForTitle,
-	getDataPostsForTitleLoading
-} from "../../store/posts"
+import { setPostsData, getKeysArrayData, getAllData } from "../../store/posts"
 
 const PostsPage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) => {
 	const dispatch = useDispatch()
-	const valueSearch = useSelector(getSearchValuePostsTitle())
-	const dataPostsForTitle = useSelector(getDataPostsForTitle())
-	const loadingDataPostsForTitle = useSelector(getDataPostsForTitleLoading())
-	if (serverPosts) {
-		dispatch(setPostsData(serverPosts, 1))
-	}
+	if (serverPosts) dispatch(setPostsData(serverPosts, 1))
 	// STATE
-	//const [loadingDataForTitle, setLoadingDataForTitle] = useState(false)
+	const [loadingDataForTitle, setLoadingDataForTitle] = useState(false)
 	const [dataPosts, setDataPosts] = useState(serverPosts)
+	const [dataPostsSearch, setDataPostsSearch] = useState(null)
 	const [length, setLength] = useState(serverLengthPosts)
 	const [currentValue, setCurrentValue] = useState(1)
 	const [loading, setLoading] = useState(true)
+	const [valueSearch, setValueSearch] = useState("")
+	// REDUX
 	const keys = useSelector(getKeysArrayData())
 	const dataAll = useSelector(getAllData())
 	if (!dataPosts && keys.length !== 0) {
@@ -46,7 +35,14 @@ const PostsPage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) =>
 		setCurrentValue(arr[arr.length - 1].group)
 	}
 
+	// handlers function
+	const handlerChangeSearch = ({ target }) => setValueSearch(prevState => target.value)
+	const handlerResetSearch = () => {
+		setValueSearch("")
+		setDataPostsSearch(null)
+	}
 	const handlerMoreBtn = async () => {
+		handlerResetSearch()
 		const posts = await postsService.getPostsByPage(currentValue + 1)
 		dispatch(setPostsData(posts, currentValue + 1))
 		setCurrentValue(prevState => prevState + 1)
@@ -75,20 +71,27 @@ const PostsPage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) =>
 		}
 	}, [dataPosts, length])
 	if (loading) return <Spinner />
+
 	// ОБРАБОТКА ПОИСКА
-	const handlerSearch = (value) => dispatch(setSearchValuePostsTitle(value))
-	const handlerSubmitSearch = () => dispatch(fetchDataPostsForTitle())
-	const correctData = (valueSearch !== "" ? dataPostsForTitle : dataPosts)
+	const handlerSubmitSearch = async () => {
+		setLoadingDataForTitle(true)
+		const newArrayDataPosts = await postsService.getDataForTitle({ title: valueSearch, description: "" })
+		setDataPostsSearch(newArrayDataPosts)
+		setLoadingDataForTitle(false)
+	}
+	const correctData = (dataPostsSearch !== null ? dataPostsSearch : dataPosts)
 	return (
 		<PostsLayot>
 			<div className="content-container__posts posts">
 				<div className="posts__container _container">
-					{loadingDataPostsForTitle ? <Spinner /> :
+					{loadingDataForTitle ? <Spinner /> :
 						<React.Fragment>
-							<h1 className="posts__title title">Посты</h1>
+							<h1 className="posts__title title">Посты нашей платформы</h1>
 							<Button onCallFun={handlerBackBtn} type="button" text="На главную" classesParent="posts__btn_back posts" />
-							<Search classesParent="posts" placeholder="Поиск по заголовку" onHandler={handlerSearch} />
-							<Button classesParent="posts__btn_blue posts" text="Отправить" onCallFun={handlerSubmitSearch} type="button" />
+							<div className="posts__search-container">
+								<Search onReset={handlerResetSearch} onChange={handlerChangeSearch} value={valueSearch} classesParent="posts" placeholder="Поиск по заголовку" />
+								<Button classesParent="posts__btn_blue posts" text="Отправить" onCallFun={handlerSubmitSearch} type="button" />
+							</div>
 							<PostsList data={correctData} />
 							{dataPosts.length !== length &&
 								<div className="posts__wrap-btn">
@@ -104,9 +107,7 @@ const PostsPage = ({ posts: serverPosts, postsLengthAll: serverLengthPosts }) =>
 }
 
 PostsPage.getInitialProps = async ({ req }) => {
-	if (!req) {
-		return { posts: null, postsLengthAll: null }
-	}
+	if (!req) return { posts: null, postsLengthAll: null }
 	const posts = await postsService.getPostsByPage(1)
 	const postsLengthAll = await postsService.getAllLength()
 	return {

@@ -33,8 +33,8 @@ const PostPage = ({ post: postServer }) => {
 		}
 		if (!postServer) {
 			loadPost()
-			if (refBlockPost.current.offsetWidth <= 400) setBigImg(false) // Для адаптива картинки, которая главная у поста
-			if (refBlockPost.current.offsetWidth > 400) setBigImg(true)
+			if (refBlockPost.current?.offsetWidth <= 400) setBigImg(false) // Для адаптива картинки, которая главная у поста
+			if (refBlockPost.current?.offsetWidth > 400) setBigImg(true)
 		}
 	}, [])
 

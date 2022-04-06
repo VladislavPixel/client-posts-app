@@ -25,18 +25,15 @@
 	}
 	&__input-wrap{
 		width: 100%;
+		overflow: hidden;
 	}
 	&__flag{
 		position: absolute;
-		font-size: 20px;
-		padding: 8px;
-		background: rgb(112, 112, 112);
-		color: azure;
-		border-radius: 50%;
+		width: 25px;
+		height: 25px;
 		cursor: pointer;
-		right: 3px;
+		right: 7px;
 		top: 50%;
 		transform: translateY(-50%);
-		z-index: 30;
 	}
 }
