@@ -2,14 +2,14 @@ FROM node:16.13.0 as client
 
 WORKDIR /app/client
 
-COPY package.json /app/client
+COPY ./client-posts-app/package.json /app/client
 
 RUN npm install
 
-COPY client /app/client
+COPY ./client-posts-app /app/client
 
-RUN npm run build
+# RUN npm run build
 
 EXPOSE 3000
 
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev" ]
